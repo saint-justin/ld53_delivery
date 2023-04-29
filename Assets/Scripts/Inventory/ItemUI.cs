@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class ItemUI : MonoBehaviour
 {
 	[SerializeField]
-	private RectTransform[] _blocks;
+	private BlockUI[] _blocks;
 
-	private Image _image;
+	[SerializeField]
+	private Image _icon;
 
 	private InventoryUI _inventoryUI;
 
@@ -21,7 +22,6 @@ public class ItemUI : MonoBehaviour
 
 	private SlotUI[] _slots;
 
-
 	public void Initialize(InventoryUI inventoryUI, GraphicRaycaster raycaster, EventSystem eventSystem)
 	{
 		_inventoryUI = inventoryUI;
@@ -32,15 +32,13 @@ public class ItemUI : MonoBehaviour
 
 		_ptrEventData = new PointerEventData(_eventSystem);
 
-		_image = GetComponent<Image>();
-
 		_slots = new SlotUI[_blocks.Length];
 	}
 
 
 	public void SetColor(Color color)
 	{
-		_image.color = color;
+		_icon.color = color;
 	}
 
 
@@ -50,7 +48,7 @@ public class ItemUI : MonoBehaviour
 		{
 			List<RaycastResult> hits = new List<RaycastResult>();
 
-			_ptrEventData.position = _blocks[i].position;
+			_ptrEventData.position = _blocks[i].transform.position;
 
 			_rayCaster.Raycast(_ptrEventData, hits);
 
@@ -62,12 +60,19 @@ public class ItemUI : MonoBehaviour
 				{
 					SlotUI slot = hits[hit].gameObject.GetComponent<SlotUI>();
 
-					if (slot != null && !slot.HasItem)
+					if (slot != null && !slot.HasItem && !slot.IsDamaged)
 					{
 						foundSlot = true;
+						Debug.Log($"Found valid slot at block {i}: {slot.name}");
+					}
+					else if(slot != null)
+					{
+						Debug.Log($"Found invalid slot at block {i}: {slot.name}");
+						return false;
 					}
 					else
 					{
+						Debug.Log($"Failed to find slot at block {i}");
 						return false;
 					}
 				}
@@ -86,7 +91,10 @@ public class ItemUI : MonoBehaviour
 
 	public void PickItem()
 	{
-		_image.raycastTarget = false;
+		for (int i = 0; i < _blocks.Length; i++)
+		{
+			_blocks[i].EnableRayCast(false);
+		}
 
 		for (int i = 0; i < _slots.Length; i++)
 		{
@@ -100,19 +108,11 @@ public class ItemUI : MonoBehaviour
 
 	public void PlaceItem()
 	{
-		transform.SetParent(_inventoryUI.ItemParent);
-
-		//transform.position = position;
-
-		_image.raycastTarget = true;
-
-
-
 		for (int i = 0; i < _blocks.Length; i++)
 		{
 			List<RaycastResult> hits = new List<RaycastResult>();
 
-			_ptrEventData.position = _blocks[i].position;
+			_ptrEventData.position = _blocks[i].transform.position;
 
 			_rayCaster.Raycast(_ptrEventData, hits);
 
@@ -127,6 +127,31 @@ public class ItemUI : MonoBehaviour
 						slot.PlaceItem(this);
 						_slots[i] = slot;
 					}
+				}
+			}
+
+			_blocks[i].EnableRayCast(true);
+		}
+
+
+		transform.SetParent(_inventoryUI.ItemParent);
+
+
+		List<RaycastResult> centerhits = new List<RaycastResult>();
+
+		_ptrEventData.position = transform.position;
+
+		_rayCaster.Raycast(_ptrEventData, centerhits);
+
+		for (int hit = 0; hit < centerhits.Count; hit++)
+		{
+			if (centerhits[hit].gameObject != null && centerhits[hit].gameObject.CompareTag("Slot"))
+			{
+				SlotUI slot = centerhits[hit].gameObject.GetComponent<SlotUI>();
+
+				if (slot != null)
+				{
+					transform.position = slot.transform.position;
 				}
 			}
 		}

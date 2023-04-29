@@ -25,6 +25,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private ItemUI[] _itemPrefabs;
 
 
+	public Transform Blip;
 
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -37,13 +38,25 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		}
 
 
-		Debug.Log(eventData.position);
+		//Blip.position = eventData.position;
 
-		//Debug.Log(hitObject);
+
+		if (eventData.button == PointerEventData.InputButton.Right)
+		{
+			SlotUI slot = hitObject.GetComponent<SlotUI>();
+
+			if (slot != null)
+			{
+				slot.SetDamaged(!slot.IsDamaged);
+			}
+
+			return;
+		}
 
 
 		if (_cursor.HasItem && hitObject.CompareTag("Slot"))
 		{
+			Debug.Log("Found item with Slot tag");
 			SlotUI slot = hitObject.GetComponent<SlotUI>();
 
 			if (slot != null)
@@ -54,11 +67,11 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		}
 		else if (!_cursor.HasItem && hitObject.CompareTag("Item"))
 		{
-			ItemUI item = hitObject.GetComponent<ItemUI>();
+			BlockUI block = hitObject.GetComponent<BlockUI>();
 
-			if (item != null)
+			if (block != null)
 			{
-				_cursor.PickItem(item);
+				_cursor.PickItem(block.GetParentItem);
 			}
 		}
 	}
@@ -76,5 +89,11 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 			_cursor.PickItem(item);
 		}
+	}
+
+
+	public void DeleteItem()
+	{
+		_cursor.DeleteItem();
 	}
 }

@@ -18,6 +18,12 @@ public class CursorUI : MonoBehaviour
 	[SerializeField][Range(0f, 0.99f)]
 	private float _smoothing;
 
+	[SerializeField]
+	private Color _validColor;
+
+	[SerializeField]
+	private Color _invalidColor;
+
 	public bool HasItem { get { return _item != null; } }
 
 	private GraphicRaycaster _raycaster;
@@ -27,6 +33,9 @@ public class CursorUI : MonoBehaviour
 	private ItemUI _item;
 
 	private GameObject _prevHit;
+	private GameObject _currentHit;
+
+	private bool flipflop;
 
 
 	public void PickItem(ItemUI item)
@@ -38,6 +47,8 @@ public class CursorUI : MonoBehaviour
 		_item.PickItem();
 
 		_image.enabled = false;
+
+		Debug.Log("Pick Item");
 	}
 
 
@@ -45,13 +56,24 @@ public class CursorUI : MonoBehaviour
 	{
 		if (_item.CheckPlacement())
 		{
-			_item.transform.position = slot.transform.position;
-
 			_item.PlaceItem();
 
 			_item = null;
 
 			_image.enabled = true;
+		}
+
+		Debug.Log("Place Item");
+	}
+
+
+	public void DeleteItem()
+	{
+		if (_item != null)
+		{
+			Destroy(_item.gameObject);
+
+			_item = null;
 		}
 	}
 
@@ -70,13 +92,7 @@ public class CursorUI : MonoBehaviour
 
 	private void Update()
 	{
-		// Move the item towards the current mouse position
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
-
 		
-
-
-
 		PointerEventData ptrEventData = new PointerEventData(_eventSystem);
 		ptrEventData.position = Input.mousePosition;
 
@@ -84,54 +100,43 @@ public class CursorUI : MonoBehaviour
 
 		_raycaster.Raycast(ptrEventData, results);
 
-		if (results.Count > 0 && results[0].gameObject != null)
+		if (results.Count > 0)
 		{
-			if (_gridSnap)
-			{
-				transform.position = Vector3.Lerp(transform.position, results[0].gameObject.transform.position, 1f - _smoothing);
-			}
-			else
-			{
-				transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
-			}
-
-			//if (results[0].gameObject != _prevHit)
-			//{
-			//	_prevHit = results[0].gameObject;
-
-			//	if (_item != null && !_item.CheckPlacement())
-			//	{
-			//		_item.SetColor(Color.red);
-			//	}
-			//}
+			_currentHit = results[0].gameObject;
 		}
 		else
 		{
-			transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
-
-			//if (_prevHit != null)
-			//{
-			//	_prevHit = null;
-
-			//	if (_item != null)
-			//	{
-			//		_item.SetColor(Color.white);
-			//	}
-			//}
+			_currentHit = null;
 		}
 
 
-		if (_item != null)
+		if (_currentHit != null && _gridSnap)
 		{
-			if (!_item.CheckPlacement())
+			transform.position = Vector3.Lerp(transform.position, results[0].gameObject.transform.position, 1f - _smoothing);
+		}
+		else
+		{
+			// Move the item towards the current mouse position
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
+			transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
+		}
+
+
+		if (_currentHit != _prevHit)
+		{
+			_prevHit = _currentHit;
+
+			if (_item != null)
 			{
-				_item.SetColor(Color.red);
+				if (_item.CheckPlacement())
+				{
+					_item.SetColor(_validColor);
+				}
+				else
+				{
+					_item.SetColor(_invalidColor);
+				}
 			}
-			else
-			{
-				_item.SetColor(Color.white);
-			}
-			
 		}
 	}
 }
