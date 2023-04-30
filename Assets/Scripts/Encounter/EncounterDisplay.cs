@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EncounterDisplay : MonoBehaviour
-{
-    [SerializeField] private Encounter encounter;
+public class EncounterDisplay : MonoBehaviour { 
+
+    [SerializeField] private EncounterSO encounter;
     private List<Challenge> challenges;
-    private List<EnemyAttack> enemyAttacks;
+    private List<GameObject> enemyAttacks;
 
     [SerializeField] private Image image;
 
 
-    private void Awake() 
-    {
-        UpdateEncounter();
+    private void Awake() {
     }
 
-    public void UpdateEncounter() 
-    {
+    public void UpdateEncounter(EncounterSO newEncounter) {
+        encounter = newEncounter;
         image.sprite = encounter.EnemySprite;
         challenges = encounter.Challenges;
         enemyAttacks = encounter.EnemyAttacks;

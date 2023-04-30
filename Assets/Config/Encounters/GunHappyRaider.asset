@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: GunHappyRaider
   m_EditorClassIdentifier: 
   challenges: []
-  enemyAttacks: []
+  enemyAttacks:
+  - {fileID: 8203217213311966583, guid: db3c04e818437c0449aed0e9b0e31eaa, type: 3}
+  - {fileID: 8203217213311966583, guid: db3c04e818437c0449aed0e9b0e31eaa, type: 3}
+  - {fileID: 729130036243146368, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
   enemySprite: {fileID: 21300000, guid: 30f0507b37901b348ba286a55c05a3a7, type: 3}
