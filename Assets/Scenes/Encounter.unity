@@ -4171,6 +4171,10 @@ MonoBehaviour:
   _smoothing: 0.868
   _validColor: {r: 1, g: 1, b: 1, a: 0.105882354}
   _invalidColor: {r: 1, g: 0, b: 0, a: 0.08627451}
+  _toolTip: {fileID: 0}
+  _toolTipName: {fileID: 0}
+  _toolTipDescription: {fileID: 0}
+  _icon: {fileID: 0}
 --- !u!114 &756751781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4647,7 +4651,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 906567509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5090554c6d26c1e44a768601366f06ca, type: 3}
+  m_Script: {fileID: 11500000, guid: dfd4cd8ec5d3792478f12f081ddbcab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   encounter: {fileID: 0}
@@ -8540,6 +8544,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4bd12a00b20139e468efdc0f2e58a43e, type: 2}
   - {fileID: 11400000, guid: 10820191f4293bc4ab6310480dfd5bcf, type: 2}
   _ptrRaycastDebug: {fileID: 1857679706}
+  _slotGroups: []
+  _scoreTMP: {fileID: 0}
 --- !u!95 &1900111952
 Animator:
   serializedVersion: 3

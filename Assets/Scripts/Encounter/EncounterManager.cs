@@ -8,25 +8,26 @@ public class EncounterManager : MonoBehaviour {
     [SerializeField] private int numberOfEncounters = 5;
     [SerializeField] private EncounterDisplay encounterDisplay;
     [SerializeField] private List<EncounterSO> possibleEnemies;
-    private System.Random random;
-    private int currentEncounter;
-    private BaseState currentState;
+    
     [SerializeField] private Animator enemyAnimator;
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private BaseState currentState;
+    private System.Random random;
+    private int currentEncounter;
 
 
     // States
-    private IntroState dialogue;
-    private PlayerTurnState playerTurn;
-    private EnemyTurnState enemyTurn;
+    public IntroState Dialogue { get; private set; }
+    public PlayerTurnState PlayerTurn { get; private set; }
+    public EnemyTurnState EnemyTurn { get; private set; }
 
 
     private void Awake() {
         random = new System.Random();
-        dialogue = new IntroState(this, enemyAnimator, playerAnimator);
-        playerTurn = new PlayerTurnState(this);
-        enemyTurn = new EnemyTurnState(this);
-        ChangeState(dialogue);
+        Dialogue = new IntroState(this, enemyAnimator, playerAnimator);
+        PlayerTurn = new PlayerTurnState(this);
+        EnemyTurn = new EnemyTurnState(this);
+        ChangeState(Dialogue);
     }
 
 
