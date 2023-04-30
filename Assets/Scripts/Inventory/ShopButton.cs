@@ -13,11 +13,29 @@ public class ShopButton : MonoBehaviour
 	private Button _button;
 
 	[SerializeField]
-	private TextMeshProUGUI _tmp;
+	private TextMeshProUGUI _nameTMP;
+
+	[SerializeField]
+	private TextMeshProUGUI _descriptionTMP;
+
+
+	private ItemSO _itemSO;
+
+	
+	public void Initialize(ItemSO itemSO)
+	{
+		_itemSO = itemSO;
+
+		_nameTMP.text = itemSO.Name + ":";
+
+		_descriptionTMP.text = itemSO.Description;
+
+		_image.sprite = itemSO.Icon;
+	}
 
 
 	public void OnPress()
 	{
-
+		InventoryUI.Instance.SpawnItem(_itemSO.ItemID);
 	}
 }

@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: General 3
   m_EditorClassIdentifier: 
   Name: General 3
+  Description: 
   ItemID: 2
-  GroupType: 5
+  GroupType: 1
   Durable: 0
   Energy: 0
   Heat: 0
   Water: 0
   Ammo: 0
-  Icon: {fileID: 21300000, guid: b281b91a70a624a0da1c43adc1c30c7b, type: 3}
+  Value: 10
+  Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
   Prefab: {fileID: 8203217213311966569, guid: 21e6e8198371e3643a168b8196803f69, type: 3}

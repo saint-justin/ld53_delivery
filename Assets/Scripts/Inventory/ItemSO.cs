@@ -8,6 +8,8 @@ public class ItemSO : ScriptableObject
 {
 	public string Name;
 
+	public string Description;
+
 	public int ItemID;
 
 	public GroupType GroupType;
@@ -21,6 +23,8 @@ public class ItemSO : ScriptableObject
 	public int Water;
 
 	public int Ammo;
+
+	public float Value;
 
 	public Sprite Icon;
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,13 +25,27 @@ public class CursorUI : MonoBehaviour
 	[SerializeField]
 	private Color _invalidColor;
 
+	[SerializeField]
+	private Image _toolTip;
+
+	[SerializeField]
+	private TextMeshProUGUI _toolTipName;
+
+	[SerializeField]
+	private TextMeshProUGUI _toolTipDescription;
+
+
 	public bool HasItem { get { return _item != null; } }
 
 	private GraphicRaycaster _raycaster;
 
-	private Image _image;
+	private PointerEventData _ptrEventData;
+
+	[SerializeField]
+	private Image _icon;
 
 	private ItemUI _item;
+	public ItemUI CurrentItem { get { return _item; } }
 
 	private GameObject _prevHit;
 	private GameObject _currentHit;
@@ -42,22 +57,20 @@ public class CursorUI : MonoBehaviour
 	{
 		_item = item;
 
-		//_item.transform.SetParent(transform);
-
 		_item.transform.position = transform.position;
 
 		_item.PickItem();
 
-		_image.enabled = false;
+		_icon.enabled = false;
 
-		Debug.Log("Pick Item");
+		//Debug.Log("Pick Item");
 
 		_wasValid = false;
 		_item.SetColor(_invalidColor);
 	}
 
 
-	public void PlaceItem(SlotUI slot)
+	public bool PlaceItem(SlotUI slot)
 	{
 		if (_item.CheckPlacement(out bool onGrid, out Vector3 snapPosition))
 		{
@@ -65,10 +78,12 @@ public class CursorUI : MonoBehaviour
 
 			_item = null;
 
-			_image.enabled = true;
+			_icon.enabled = true;
+
+			return true;
 		}
 
-		Debug.Log("Place Item");
+		return false;
 	}
 
 
@@ -80,17 +95,36 @@ public class CursorUI : MonoBehaviour
 
 			_item = null;
 
-			_image.enabled = true;
+			_icon.enabled = true;
 		}
+	}
+
+
+	private void SetToolTip(ItemUI itemUI)
+	{
+		if (itemUI == null)
+		{
+			_toolTip.gameObject.SetActive(false);
+			return;
+		}
+
+
+		_toolTip.gameObject.SetActive(true);
+
+		_toolTipName.text = itemUI.ItemSO.Name + ":";
+
+		_toolTipDescription.text = itemUI.ItemSO.Description;
+
 	}
 
 
 	private void Start()
 	{
 		_raycaster = _canvas.GetComponent<GraphicRaycaster>();
-		_image = GetComponent<Image>();
 
-		Cursor.visible = false;
+		_ptrEventData = new PointerEventData(_eventSystem);
+
+		//Cursor.visible = false;
 
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
 		transform.localPosition = position;
@@ -114,7 +148,7 @@ public class CursorUI : MonoBehaviour
 
 			if (isValid != _wasValid)
 			{
-				Debug.Log(snapPostition);
+				//Debug.Log(snapPostition);
 
 				_wasValid = isValid;
 
@@ -133,6 +167,44 @@ public class CursorUI : MonoBehaviour
 			{
 				_item.transform.position = Vector3.Lerp(prevPosition, snapPostition, 1f - _smoothing);
 				_item.SetRaycastDebug(snapPostition);
+			}
+		}
+		else
+		{
+			_ptrEventData.position = transform.position;
+
+			List<RaycastResult> results = new List<RaycastResult>();
+
+			_raycaster.Raycast(_ptrEventData, results);
+
+			if (results.Count > 0)
+			{
+				_currentHit = results[0].gameObject;
+			}
+
+			if (_currentHit != _prevHit)
+			{
+				_prevHit = _currentHit;
+
+				//Debug.Log("Hit Something New");
+
+				if (_currentHit != null)
+				{
+					BlockUI block = _currentHit.GetComponent<BlockUI>();
+
+					if (block != null)
+					{
+						SetToolTip(block.GetParentItem);
+					}
+					else
+					{
+						SetToolTip(null);
+					}
+				}
+				else
+				{
+					SetToolTip(null);
+				}
 			}
 		}
 	}

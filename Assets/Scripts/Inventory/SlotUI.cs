@@ -23,6 +23,8 @@ public class SlotUI : MonoBehaviour
 
 	private ItemUI _item;
 
+	private BlockUI _block;
+
 	
 
 
@@ -32,19 +34,26 @@ public class SlotUI : MonoBehaviour
 	}
 
 
-	public void PlaceItem(ItemUI item)
+	public void PlaceItem(BlockUI block)
 	{
-		_item = item;
+		_block = block;
+		_item = block.GetParentItem;
 
-		Debug.Log("Placed item in slot");
+		//Debug.Log("Placed item in slot");
 	}
 
 
 	public void PickItem()
 	{
-		_item = null;
+		if (_block.IsDamaged)
+		{
+			_block.SetDamaged(false);
+		}
 
-		Debug.Log("Removed item in slot");
+		_item = null;
+		_block = null;
+
+		//Debug.Log("Removed item in slot");
 	}
 
 
@@ -53,6 +62,11 @@ public class SlotUI : MonoBehaviour
 		_isDamaged = damaged;
 
 		_damageIcon.enabled = damaged;
+
+		if (_block != null)
+		{
+			_block.SetDamaged(damaged);
+		}
 	}
 
 
