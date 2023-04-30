@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: b2e6c827b078abe4e908acf9110c7d88
+=======
+guid: 098c613460267c34da00ffb3600a53a3
+>>>>>>> 6ed699f (Adding dialogue overlay prefab + demo scene)
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
