@@ -172,6 +172,7 @@ MonoBehaviour:
   - {fileID: 6684171407171411213}
   - {fileID: 5376121596146746044}
   _icon: {fileID: 7692013424422389450}
+  _groupType: 1
 --- !u!1001 &2407533658805369066
 PrefabInstance:
   m_ObjectHideFlags: 0

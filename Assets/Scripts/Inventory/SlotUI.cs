@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,21 +12,22 @@ public class SlotUI : MonoBehaviour
 	[SerializeField]
 	private Image _damageIcon;
 
-	[SerializeField]
-	private Color _color;
 
 	public bool HasItem { get { return _item != null; } }
 
 	private bool _isDamaged;
 	public bool IsDamaged { get { return _isDamaged; } }
 
+	private GroupType _groupType;
+	public GroupType GroupType { get { return _groupType; } }
+
 	private ItemUI _item;
+
+	
 
 
 	private void Start()
 	{
-		_slotIcon.color = _color;
-
 		SetDamaged(false);
 	}
 
@@ -36,6 +38,7 @@ public class SlotUI : MonoBehaviour
 
 		Debug.Log("Placed item in slot");
 	}
+
 
 	public void PickItem()
 	{
@@ -50,5 +53,17 @@ public class SlotUI : MonoBehaviour
 		_isDamaged = damaged;
 
 		_damageIcon.enabled = damaged;
+	}
+
+
+	public void SetColor(Color color)
+	{
+		_slotIcon.color = color;
+	}
+
+
+	public void SetGroupType(GroupType groupType)
+	{
+		_groupType = groupType;
 	}
 }

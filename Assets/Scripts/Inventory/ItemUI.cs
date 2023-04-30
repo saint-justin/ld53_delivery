@@ -12,6 +12,8 @@ public class ItemUI : MonoBehaviour
 	[SerializeField]
 	private Image _icon;
 
+	private ItemSO _itemSO;
+
 	private InventoryUI _inventoryUI;
 
 	private GraphicRaycaster _rayCaster;
@@ -22,8 +24,12 @@ public class ItemUI : MonoBehaviour
 
 	private SlotUI[] _slots;
 
-	public void Initialize(InventoryUI inventoryUI, GraphicRaycaster raycaster, EventSystem eventSystem)
+	public void Initialize(ItemSO itemSO, InventoryUI inventoryUI, GraphicRaycaster raycaster, EventSystem eventSystem)
 	{
+		_itemSO = itemSO;
+
+		_icon.sprite = itemSO.Icon;
+
 		_inventoryUI = inventoryUI;
 
 		_rayCaster = raycaster;
@@ -42,8 +48,14 @@ public class ItemUI : MonoBehaviour
 	}
 
 
-	public bool CheckPlacement()
+	public bool CheckPlacement(out bool onGrid, out Vector3 snapPosition)
 	{
+		onGrid = false;
+		snapPosition = Vector3.zero;
+
+		bool valid = true;
+		bool foundTypeMatch = false;
+
 		for (int i = 0; i < _blocks.Length; i++)
 		{
 			List<RaycastResult> hits = new List<RaycastResult>();
@@ -52,40 +64,46 @@ public class ItemUI : MonoBehaviour
 
 			_rayCaster.Raycast(_ptrEventData, hits);
 
-			bool foundSlot = false;
+			SlotUI slot = null;
 
 			for (int hit = 0; hit < hits.Count; hit++)
 			{
 				if (hits[hit].gameObject != null && hits[hit].gameObject.CompareTag("Slot"))
 				{
-					SlotUI slot = hits[hit].gameObject.GetComponent<SlotUI>();
-
-					if (slot != null && !slot.HasItem && !slot.IsDamaged)
-					{
-						foundSlot = true;
-						Debug.Log($"Found valid slot at block {i}: {slot.name}");
-					}
-					else if(slot != null)
-					{
-						Debug.Log($"Found invalid slot at block {i}: {slot.name}");
-						return false;
-					}
-					else
-					{
-						Debug.Log($"Failed to find slot at block {i}");
-						return false;
-					}
+					slot = hits[hit].gameObject.GetComponent<SlotUI>();
 				}
 			}
 
-			if (!foundSlot)
+			if (slot != null)
 			{
-				return false;
+				onGrid = true;
+				snapPosition = slot.transform.position + transform.position - _blocks[i].transform.position;
+
+				//_blocks[i]._raycastDebug.position = snapPosition;
+
+				if (!slot.HasItem && !slot.IsDamaged)
+				{
+					if (_itemSO.GroupType == GroupType.General || _itemSO.GroupType == slot.GroupType)
+					{
+						foundTypeMatch = true;
+					}
+					//Debug.Log($"Found valid slot at block {i}: {slot.name}");
+				}
+				else
+				{
+					valid = false;
+					//Debug.Log($"Found invalid slot at block {i}: {slot.name}");
+				}
+			}
+			else
+			{
+				valid = false;
+				//Debug.Log($"Failed to find slot at block {i}");
 			}
 		}
 
 
-		return true;
+		return valid && foundTypeMatch;
 	}
 
 
@@ -106,7 +124,7 @@ public class ItemUI : MonoBehaviour
 		}
 	}
 
-	public void PlaceItem()
+	public void PlaceItem(Vector3 position)
 	{
 		for (int i = 0; i < _blocks.Length; i++)
 		{
@@ -136,24 +154,15 @@ public class ItemUI : MonoBehaviour
 
 		transform.SetParent(_inventoryUI.ItemParent);
 
+		transform.position = position;
+	}
 
-		List<RaycastResult> centerhits = new List<RaycastResult>();
 
-		_ptrEventData.position = transform.position;
-
-		_rayCaster.Raycast(_ptrEventData, centerhits);
-
-		for (int hit = 0; hit < centerhits.Count; hit++)
+	public void SetRaycastDebug(Vector3 position)
+	{
+		for (int i = 0; i < _blocks.Length; i++)
 		{
-			if (centerhits[hit].gameObject != null && centerhits[hit].gameObject.CompareTag("Slot"))
-			{
-				SlotUI slot = centerhits[hit].gameObject.GetComponent<SlotUI>();
-
-				if (slot != null)
-				{
-					transform.position = slot.transform.position;
-				}
-			}
+			_blocks[i]._raycastDebug.position = position;
 		}
 	}
 }

@@ -143,6 +143,7 @@ MonoBehaviour:
   - {fileID: 5376121596146746044}
   - {fileID: 3737881878769489144}
   _icon: {fileID: 720910579656712874}
+  _groupType: 4
 --- !u!1001 &1193670748653539292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220,7 +221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8736560354626724259, guid: a940511457c58d54c90204bf3dad89d2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8736560354626724259, guid: a940511457c58d54c90204bf3dad89d2, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -35,28 +35,33 @@ public class CursorUI : MonoBehaviour
 	private GameObject _prevHit;
 	private GameObject _currentHit;
 
-	private bool flipflop;
+	private bool _wasValid;
 
 
 	public void PickItem(ItemUI item)
 	{
 		_item = item;
 
-		_item.transform.SetParent(transform);
+		//_item.transform.SetParent(transform);
+
+		_item.transform.position = transform.position;
 
 		_item.PickItem();
 
 		_image.enabled = false;
 
 		Debug.Log("Pick Item");
+
+		_wasValid = false;
+		_item.SetColor(_invalidColor);
 	}
 
 
 	public void PlaceItem(SlotUI slot)
 	{
-		if (_item.CheckPlacement())
+		if (_item.CheckPlacement(out bool onGrid, out Vector3 snapPosition))
 		{
-			_item.PlaceItem();
+			_item.PlaceItem(snapPosition);
 
 			_item = null;
 
@@ -74,6 +79,8 @@ public class CursorUI : MonoBehaviour
 			Destroy(_item.gameObject);
 
 			_item = null;
+
+			_image.enabled = true;
 		}
 	}
 
@@ -92,43 +99,26 @@ public class CursorUI : MonoBehaviour
 
 	private void Update()
 	{
-		
-		PointerEventData ptrEventData = new PointerEventData(_eventSystem);
-		ptrEventData.position = Input.mousePosition;
+		// Move the item towards the current mouse position
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
 
-		List<RaycastResult> results = new List<RaycastResult>();
 
-		_raycaster.Raycast(ptrEventData, results);
-
-		if (results.Count > 0)
+		if (_item != null)
 		{
-			_currentHit = results[0].gameObject;
-		}
-		else
-		{
-			_currentHit = null;
-		}
+			// Need to temporarilly move the item to the cursor location to perform the raycasts
+			Vector3 prevPosition = _item.transform.position;
+			_item.transform.position = transform.position;
 
+			bool isValid = _item.CheckPlacement(out bool onGrid, out Vector3 snapPostition);
 
-		if (_currentHit != null && _gridSnap)
-		{
-			transform.position = Vector3.Lerp(transform.position, results[0].gameObject.transform.position, 1f - _smoothing);
-		}
-		else
-		{
-			// Move the item towards the current mouse position
-			RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
-			transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
-		}
-
-
-		if (_currentHit != _prevHit)
-		{
-			_prevHit = _currentHit;
-
-			if (_item != null)
+			if (isValid != _wasValid)
 			{
-				if (_item.CheckPlacement())
+				Debug.Log(snapPostition);
+
+				_wasValid = isValid;
+
+				if (isValid)
 				{
 					_item.SetColor(_validColor);
 				}
@@ -136,6 +126,13 @@ public class CursorUI : MonoBehaviour
 				{
 					_item.SetColor(_invalidColor);
 				}
+			}
+
+
+			if (onGrid && _gridSnap)
+			{
+				_item.transform.position = Vector3.Lerp(prevPosition, snapPostition, 1f - _smoothing);
+				_item.SetRaycastDebug(snapPostition);
 			}
 		}
 	}

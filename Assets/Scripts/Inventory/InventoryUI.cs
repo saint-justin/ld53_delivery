@@ -22,10 +22,30 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private GraphicRaycaster _graphicRaycaster;
 
 	[SerializeField]
-	private ItemUI[] _itemPrefabs;
+	private ItemSO[] _itemSOs;
+
+	[SerializeField]
+	private Transform _ptrRaycastDebug;
+
+	private Dictionary<int, ItemSO> _itemDict;
 
 
-	public Transform Blip;
+	private void Start()
+	{
+		_itemDict = new Dictionary<int, ItemSO>();
+
+		for (int i = 0; i < _itemSOs.Length; i++)
+		{
+			if (_itemDict.ContainsKey(_itemSOs[i].ItemID))
+			{
+				_itemDict[_itemSOs[i].ItemID] = _itemSOs[i];
+			}
+			else
+			{
+				_itemDict.Add(_itemSOs[i].ItemID, _itemSOs[i]);
+			}
+		}
+	}
 
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -37,9 +57,11 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			return;
 		}
 
-
-		//Blip.position = eventData.position;
-
+		if (_ptrRaycastDebug != null)
+		{
+			_ptrRaycastDebug.position = eventData.position;
+		}
+		
 
 		if (eventData.button == PointerEventData.InputButton.Right)
 		{
@@ -79,11 +101,17 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	public void SpawnItem(int itemID)
 	{
-		if (!_cursor.HasItem)
+		if (!_cursor.HasItem && _itemDict.TryGetValue(itemID, out ItemSO itemSO))
 		{
-			ItemUI item = Instantiate(_itemPrefabs[itemID], _itemParent, false);
+			if (itemSO.Prefab == null)
+			{
+				Debug.LogWarning($"Failed to spawn item: {itemSO} Check the ItemSO for missing Prefab");
+				return;
+			}
 
-			item.Initialize(this, _graphicRaycaster, _eventSystem);
+			ItemUI item = Instantiate(itemSO.Prefab, _itemParent, false);
+
+			item.Initialize(itemSO, this, _graphicRaycaster, _eventSystem);
 
 			item.transform.position = _cursor.transform.position;
 

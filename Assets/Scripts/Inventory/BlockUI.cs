@@ -8,6 +8,8 @@ public class BlockUI : MonoBehaviour
 	private ItemUI _parentItem;
 	public ItemUI GetParentItem { get { return _parentItem; } }
 
+	public Transform _raycastDebug;
+
 
 	[SerializeField]
 	private Image _raycastTarget;

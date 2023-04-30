@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 8572394506355040881}
   - component: {fileID: 2398815779180508495}
   m_Layer: 0
-  m_Name: slotUI
+  m_Name: SlotUI
   m_TagString: Slot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,4 +166,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slotIcon: {fileID: 8572394506355040881}
   _damageIcon: {fileID: 3027049653553019082}
-  _color: {r: 1, g: 1, b: 1, a: 1}

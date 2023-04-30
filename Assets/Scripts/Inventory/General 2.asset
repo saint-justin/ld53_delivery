@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
+  m_Name: General 2
+  m_EditorClassIdentifier: 
+  Name: General 2
+  ItemID: 1
+  GroupType: 1
+  Durable: 0
+  Energy: 0
+  Heat: 0
+  Water: 0
+  Ammo: 0
+  Icon: {fileID: 21300000, guid: b281b91a70a624a0da1c43adc1c30c7b, type: 3}
+  Prefab: {fileID: 729130036243146398, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}

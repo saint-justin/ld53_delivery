@@ -64,6 +64,7 @@ MonoBehaviour:
   - {fileID: 5795928512629914235}
   - {fileID: 1161816809133645770}
   _icon: {fileID: 1382650555118819100}
+  _groupType: 1
 --- !u!1 &3331035130495583656
 GameObject:
   m_ObjectHideFlags: 0
