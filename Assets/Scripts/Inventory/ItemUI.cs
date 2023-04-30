@@ -13,6 +13,10 @@ public class ItemUI : MonoBehaviour
 	private Image _icon;
 
 	private ItemSO _itemSO;
+	public ItemSO ItemSO { get { return _itemSO; } }
+
+	private bool _isDamaged;
+	public bool IsDamaged { get { return _isDamaged; } }
 
 	private InventoryUI _inventoryUI;
 
@@ -39,6 +43,8 @@ public class ItemUI : MonoBehaviour
 		_ptrEventData = new PointerEventData(_eventSystem);
 
 		_slots = new SlotUI[_blocks.Length];
+
+		_isDamaged = false;
 	}
 
 
@@ -142,7 +148,7 @@ public class ItemUI : MonoBehaviour
 
 					if (slot != null)
 					{
-						slot.PlaceItem(this);
+						slot.PlaceItem(_blocks[i]);
 						_slots[i] = slot;
 					}
 				}
@@ -164,5 +170,34 @@ public class ItemUI : MonoBehaviour
 		{
 			_blocks[i]._raycastDebug.position = position;
 		}
+	}
+
+
+	public bool IsTouchingGroupType(GroupType groupType)
+	{
+		for (int i = 0; i < _slots.Length; i++)
+		{
+			if (_slots[i] != null && _slots[i].GroupType == groupType)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	public void CheckDamage()
+	{
+		for (int i = 0; i < _blocks.Length; i++)
+		{
+			if (_blocks[i].IsDamaged)
+			{
+				_isDamaged = true;
+				return;
+			}
+		}
+
+		_isDamaged = false;
 	}
 }

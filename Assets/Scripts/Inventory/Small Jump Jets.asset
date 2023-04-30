@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
-  m_Name: Hat L 4
+  m_Name: Small Jump Jets
   m_EditorClassIdentifier: 
-  Name: Hat L 4
-  Description: 
-  ItemID: 4
-  GroupType: 4
+  Name: Small Jump Jets
+  Description: Provides a small boost to speed
+  ItemID: 5
+  GroupType: 3
   Durable: 0
-  Energy: 0
-  Heat: 0
+  Energy: 2
+  Heat: 4
   Water: 0
   Ammo: 0
-  Value: 20
+  Value: 30
   Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
-  Prefab: {fileID: 8203217213311966569, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  Prefab: {fileID: 729130036243146398, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
