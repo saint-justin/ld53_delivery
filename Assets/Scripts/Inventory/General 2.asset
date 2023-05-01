@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: General 2
   m_EditorClassIdentifier: 
   Name: General 2
-  Description: 
+  Description: Use Action
   ItemID: 1
   GroupType: 1
   Durable: 0
@@ -21,6 +21,7 @@ MonoBehaviour:
   Heat: 0
   Water: 0
   Ammo: 0
+  AbilityValue: 1
   Value: 5
   Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}

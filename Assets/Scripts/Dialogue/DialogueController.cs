@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DialogueController : MonoBehaviour
 {
@@ -108,6 +109,8 @@ public class DialogueController : MonoBehaviour
         {
             // Disable when all lines have been read
             gameObject.SetActive(false);
+
+            SceneManager.LoadScene("InventoryTestScene");
         }
     }
 

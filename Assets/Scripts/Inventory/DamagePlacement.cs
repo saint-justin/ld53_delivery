@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DamageGroup : MonoBehaviour
+public class DamagePlacement : MonoBehaviour
 {
 	[SerializeField]
 	private Transform _followTarget;
 
-	[SerializeField]
 	private DamagePattern[] _patterns;
 
 	[SerializeField]
 	private Canvas _canvas;
+
+	[SerializeField]
+	private GraphicRaycaster _raycaster;
 
 	private Vector3 _offset;
 
@@ -21,14 +23,36 @@ public class DamageGroup : MonoBehaviour
 
 	private void Start()
 	{
-		GraphicRaycaster raycaster = InventoryUI.Instance.GraphicRaycaster;
+		_offset = Vector3.zero;
+	}
+
+
+	public void SetDamagePatterns(DamagePattern[] damagePatterns)
+	{
+		if (damagePatterns == null)
+		{
+			Debug.LogWarning("Attempted to set empty damagePatternArray");
+			return;
+		}
+
+		if (_patterns != null)
+		{
+			for (int i = 0; i < _patterns.Length; i++)
+			{
+				Destroy(_patterns[i]);
+			}
+		}
+
+		_patterns = new DamagePattern[damagePatterns.Length];
 
 		for (int i = 0; i < _patterns.Length; i++)
 		{
-			_patterns[i].Initialize(raycaster);
+			_patterns[i] = Instantiate(damagePatterns[i], transform, false);
+
+			_patterns[i].Initialize(_raycaster, _canvas);
 		}
 
-		_offset = Vector3.zero;
+		PlaceDamagePatterns();
 	}
 
 
@@ -41,7 +65,7 @@ public class DamageGroup : MonoBehaviour
 
 		gameObject.SetActive(!hidePattern);
 
-		InventoryUI.Instance.TallyScore();
+		InventoryUI.Instance.TallyItemAttributes();
 	}
 
 
@@ -78,13 +102,41 @@ public class DamageGroup : MonoBehaviour
 	}
 
 
+	public void PlaceDamagePatterns()
+	{
+		EnableRaycastTarget(true);
+
+		for (int i = 0; i < _patterns.Length; i++)
+		{
+			if (!_patterns[i].FindValidSpot(transform.position))
+			{
+				Debug.LogWarning("PlaceDamagePatterns failed to find a valid location for damage");
+			}
+		}
+
+		EnableRaycastTarget(false);
+	}
+
+
+	public void EnableRaycastTarget(bool enable)
+	{
+		for (int i = 0; i < _patterns.Length; i++)
+		{
+			_patterns[i].EnableRaycastTarget(enable);
+		}
+	}
+
+
 	private void Update()
 	{
-		if ( Input.GetKeyDown(KeyCode.P))
+		if ( Input.GetKeyDown(KeyCode.O))
 		{
 			ApplyDamage(true, true);
+		}
 
-
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			PlaceDamagePatterns();
 		}
 
 		if (Input.GetKeyDown(KeyCode.W))
@@ -104,6 +156,6 @@ public class DamageGroup : MonoBehaviour
 			MovePattern(3, 1);
 		}
 
-		transform.position = _followTarget.position + _offset;
+		transform.position = _offset + _followTarget.position;
 	}
 }

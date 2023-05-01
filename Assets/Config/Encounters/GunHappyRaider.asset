@@ -17,5 +17,5 @@ MonoBehaviour:
   - {fileID: 8203217213311966583, guid: db3c04e818437c0449aed0e9b0e31eaa, type: 3}
   - {fileID: 8203217213311966583, guid: db3c04e818437c0449aed0e9b0e31eaa, type: 3}
   - {fileID: 729130036243146368, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
-  enemySprite: {fileID: 21300000, guid: 6664067f67267394a83bf0c56d8ab5d6, type: 3}
+  enemySprite: {fileID: 21300000, guid: 606e9d47a9cf827429a569bd265e0908, type: 3}
   dialogue: []

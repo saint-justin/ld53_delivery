@@ -26,6 +26,8 @@ public class BlockUI : MonoBehaviour
 	private bool _isDamaged;
 	public bool IsDamaged { get { return _isDamaged; } }
 
+	public bool IsDamagePattern { get; set; }
+
 
 	public void EnableRayCast(bool enable)
 	{
@@ -52,15 +54,17 @@ public class BlockUI : MonoBehaviour
 
 		SetDamaged(false);
 
-		_raycastTarget.enabled = true;
+		ShowRayCastBlock(false);
 
 		_damageIcon.sprite = _damageSprite;
+
+		IsDamagePattern = false;
 	}
 
 
 	public void SetupAsDamage()
 	{
-		_raycastTarget.enabled = false;
+		ShowRayCastBlock(false);
 
 		EnableRayCast(false);
 
@@ -69,5 +73,20 @@ public class BlockUI : MonoBehaviour
 		Color color = _damageIcon.color;
 		color.a = 0.5f;
 		_damageIcon.color = color;
+
+		IsDamagePattern = true;
+	}
+
+
+	public void ShowRayCastBlock(bool show)
+	{
+		if (show)
+		{
+			_raycastTarget.color = Color.white;
+		}
+		else
+		{
+			_raycastTarget.color = Color.clear;
+		}
 	}
 }

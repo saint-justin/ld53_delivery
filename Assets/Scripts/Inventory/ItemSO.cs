@@ -24,7 +24,9 @@ public class ItemSO : ScriptableObject
 
 	public int Ammo;
 
-	public float Value;
+	public int Value;
+
+	public int AbilityValue;
 
 	public Sprite Icon;
 

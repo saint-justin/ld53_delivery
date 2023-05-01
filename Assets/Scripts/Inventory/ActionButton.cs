@@ -36,36 +36,52 @@ public class ActionButton : MonoBehaviour
 
 	private ItemUI _item;
 
-	private bool _useable = true;
+	private bool _useable;
 
 	private UnityEvent<int, ItemUI> _actionEvent;
 
+	private bool _isUsed;
 
-	private void Start()
+
+	public void Initialize(ItemUI item)
 	{
-		_useable = true;
-		_background.color = _useableColor;
-	}
+		_item = item;
+		_itemSO = item.ItemSO;
 
-	public void Initialize(ItemSO itemSO)
-	{
-		_itemSO = itemSO;
+		_nameTMP.text = _itemSO.Name + ":";
 
-		_nameTMP.text = itemSO.Name + ":";
+		_descriptionTMP.text = _itemSO.Description;
 
-		_descriptionTMP.text = itemSO.Description;
+		_icon.sprite = _itemSO.Icon;
 
-		_icon.sprite = itemSO.Icon;
+		_actionEvent = _itemSO.ActionEvent;
 
-		_actionEvent = itemSO.ActionEvent;
+		Debug.Log("Item was used" + _item.IsUsed);
+		SetUseable(!_item.IsUsed);
 	}
 
 
 	public void OnPress()
 	{
-		Debug.Log("Action Pressed");
+		if (_useable)
+		{
+			if (_actionEvent != null)
+			{
+				Debug.Log("Setting item to used");
+				_item.IsUsed = true;
+				_actionEvent.Invoke(0, _item);
+			}
 
-		_useable = !_useable;
+			SetUseable(false);
+		}
+	}
+
+
+	private void SetUseable(bool useable)
+	{
+		Debug.Log("Set button to useable: " + useable);
+
+		_useable = useable;
 
 		if (_useable)
 		{
@@ -75,11 +91,5 @@ public class ActionButton : MonoBehaviour
 		{
 			_background.color = _unuseableColor;
 		}
-
-		if (_actionEvent != null)
-		{
-			_actionEvent.Invoke(0, _item);
-		}
-		
 	}
 }

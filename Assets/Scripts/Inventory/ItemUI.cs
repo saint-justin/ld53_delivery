@@ -20,6 +20,8 @@ public class ItemUI : MonoBehaviour
 	private bool _isDamaged;
 	public bool IsDamaged { get { return _isDamaged; } }
 
+	public bool IsUsed { get; set; }
+
 	private InventoryUI _inventoryUI;
 
 	private GraphicRaycaster _rayCaster;
@@ -47,6 +49,8 @@ public class ItemUI : MonoBehaviour
 		_slots = new SlotUI[_blocks.Length];
 
 		_isDamaged = false;
+
+		IsUsed = false;
 
 		for (int i = 0; i < _blocks.Length; i++)
 		{
@@ -103,6 +107,12 @@ public class ItemUI : MonoBehaviour
 
 				if (!slot.HasItem && !slot.IsDamaged)
 				{
+					if (slot.GroupType == GroupType.Belt && InventoryUI.Instance.LockBelt)
+					{
+						// Cant place an item on the belt when locked
+						valid = false;
+					}
+
 					if (_itemSO.GroupType == GroupType.General || _itemSO.GroupType == slot.GroupType)
 					{
 						foundTypeMatch = true;

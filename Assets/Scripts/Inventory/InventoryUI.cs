@@ -11,6 +11,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	public static InventoryUI Instance;
 
 	public bool LockInventory { get; set; }
+	public bool LockBelt { get; set; }
 
 	[SerializeField]
 	private CursorUI _cursor;
@@ -39,7 +40,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	private Dictionary<GroupType, SlotGroupUI> _slotGroupDict;
 
-	private LinkedList<ItemUI> _items;
+	private List<ItemUI> _items;
 
 	private int _lastDamagedGroup;
 
@@ -54,6 +55,12 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	[SerializeField]
 	private ActionUI _actionBar;
 
+	[SerializeField]
+	private Transform _rearrange;
+
+	[SerializeField]
+	private DamagePlacement _damagePlacement;
+
 
 	private void Awake()
 	{
@@ -62,6 +69,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			Instance = this;
 
 			DontDestroyOnLoad(transform.parent);
+
+			SetInventoryState(InventoryState.Load);
 		}
 		else
 		{
@@ -86,7 +95,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			}
 		}
 
-		_items = new LinkedList<ItemUI>();
+		_items = new List<ItemUI>();
 
 
 		_slotGroupDict = new Dictionary<GroupType, SlotGroupUI>();
@@ -145,7 +154,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				{
 					AddItemToInventory(item);
 
-					TallyScore();
+					TallyItemAttributes();
 				}
 			}
 			
@@ -156,11 +165,16 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 			if (block != null)
 			{
-				_cursor.PickItem(block.GetParentItem);
+				ItemUI item = block.GetParentItem;
 
-				RemoveItemFromInventory(block.GetParentItem);
+				if (!LockBelt || !item.IsTouchingGroupType(GroupType.Belt))
+				{
+					_cursor.PickItem(block.GetParentItem);
 
-				TallyScore();
+					RemoveItemFromInventory(block.GetParentItem);
+
+					TallyItemAttributes();
+				}
 			}
 		}
 	}
@@ -197,7 +211,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	{
 		if (item != null)
 		{
-			_items.AddLast(item);
+			_items.Add(item);
 		}
 	}
 
@@ -214,7 +228,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	}
 
 
-	public bool DamageSlotInGroup(GroupType groupType)
+	private bool DamageSlotInGroup(GroupType groupType)
 	{
 		if (_slotGroupDict.TryGetValue(groupType, out SlotGroupUI slotGroup))
 		{
@@ -225,28 +239,35 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	}
 
 
-	public float TallyScore()
+	public ItemTally TallyItemAttributes()
 	{
-		float score = 0;
+		ItemTally tally = new ItemTally();
 
 		foreach (ItemUI item in _items)
 		{
-			if (!item.IsDamaged && item.ItemSO.Value != 0)
+			ItemSO so = item.ItemSO;
+
+			if (!item.IsDamaged)
 			{
+				tally.Ammo += so.Ammo;
+				tally.Energy += so.Energy;
+				tally.Heat += so.Heat;
+				tally.Water += so.Water;
+
 				if (item.IsTouchingGroupType(GroupType.Belt))
 				{
-					score += item.ItemSO.Value * 1.5f;
+					tally.Value += (int)(1.5f * (float)item.ItemSO.Value);
 				}
 				else
 				{
-					score += item.ItemSO.Value;
+					tally.Value += item.ItemSO.Value;
 				}
 			}
 		}
 
-		_scoreTMP.text = "$ " + score.ToString();
+		_scoreTMP.text = "$ " + tally.Value.ToString();
 
-		return score;
+		return tally;
 	}
 
 
@@ -266,17 +287,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_lastDamagedGroup = 0;
 			}
 
-			//DamageSlotInGroup(_slotGroupDict[_slotGroups[_lastDamagedGroup].GroupType].GroupType);
-
-
-			TallyScore();
+			TallyItemAttributes();
 		}
-
-		if (Input.GetKeyDown(KeyCode.Period))
-		{
-			SceneManager.LoadScene("Encounter");
-		}
-
 
 		if (_followTarget != null)
 		{
@@ -299,7 +311,9 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				gameObject.SetActive(true);
 				_shop.gameObject.SetActive(true);
 				_actionBar.gameObject.SetActive(false);
-
+				_rearrange.gameObject.SetActive(false);
+				LockInventory = false;
+				LockBelt = false;
 				break;
 			}
 			case InventoryState.Encounter:
@@ -307,6 +321,21 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				gameObject.SetActive(true);
 				_shop.gameObject.SetActive(false);
 				_actionBar.gameObject.SetActive(true);
+				_rearrange.gameObject.SetActive(false);
+				_damagePlacement.gameObject.SetActive(true);
+				//_damagePlacement.TestPlacement();
+				LockInventory = false;
+				LockBelt = true;
+				break;
+			}
+			case InventoryState.Rearrange:
+			{
+				gameObject.SetActive(true);
+				_shop.gameObject.SetActive(false);
+				_actionBar.gameObject.SetActive(false);
+				_rearrange.gameObject.SetActive(true);
+				LockInventory = false;
+				LockBelt = true;
 				break;
 			}
 			default:
@@ -319,7 +348,40 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	public void PopulateActions()
 	{
-		//_actionBar.PopulateActions()
+		_actionBar.PopulateActions(_items);
+	}
+
+
+	public void ResetUsedItems()
+	{
+		for (int i = 0; i < _items.Count; i++)
+		{
+			_items[i].IsUsed = false;
+		}
+	}
+
+
+	public void StartEncounter()
+	{
+		PopulateActions();
+		SceneManager.LoadScene("Encounter");
+	}
+
+	public void FinishTurn()
+	{
+		SetInventoryState(InventoryState.Rearrange);
+	}
+
+
+	public void PlaceChallengeDamage(DamagePattern[] challenge)
+	{
+		_damagePlacement.SetDamagePatterns(challenge);
+	}
+
+
+	public void ApplyDamage()
+	{
+		_damagePlacement.ApplyDamage(true, true);
 	}
 }
 
@@ -329,5 +391,16 @@ public enum InventoryState
 	None,
 	Load,
 	Encounter,
-	Hidden
+	Hidden,
+	Rearrange
+}
+
+
+public struct ItemTally
+{
+	public int Energy;
+	public int Heat;
+	public int Water;
+	public int Ammo;
+	public int Value;
 }

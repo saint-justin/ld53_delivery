@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hat L 4
   m_EditorClassIdentifier: 
   Name: Hat L 4
-  Description: 
+  Description: Deal Damage
   ItemID: 4
   GroupType: 4
   Durable: 0
@@ -21,6 +21,22 @@ MonoBehaviour:
   Heat: 0
   Water: 0
   Ammo: 0
+  AbilityValue: 5
   Value: 20
   Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
   Prefab: {fileID: 8203217213311966569, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  ActionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
+        m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
+        m_MethodName: DealDamage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
