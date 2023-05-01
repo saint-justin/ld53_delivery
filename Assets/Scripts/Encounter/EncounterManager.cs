@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class EncounterManager : MonoBehaviour {
 
@@ -22,17 +22,21 @@ public class EncounterManager : MonoBehaviour {
 	private PlayerStats _playerStats;
 	public PlayerStats CurrentStats { get { return _playerStats; } }
 
+	private ItemUI currentlySelectedEquipment;
+
 	// States
 	public IntroState Dialogue { get; private set; }
 	public PlayerTurnState PlayerTurn { get; private set; }
 	public EnemyTurnState EnemyTurn { get; private set; }
+    public DamageSO ExampleDamageSO { get => _exampleDamageSO;}
+    public ItemUI CurrentlySelectedEquipment { get => currentlySelectedEquipment; set => currentlySelectedEquipment = value; }
 
-
-	private void Awake() {
+    private void Awake() {
 		random = new System.Random();
 		Dialogue = new IntroState(this, enemyAnimator, playerAnimator);
 		PlayerTurn = new PlayerTurnState(this);
 		EnemyTurn = new EnemyTurnState(this);
+		currentEncounter = 1;
 		ChangeState(Dialogue);
 
 		if (Instance == null)
@@ -53,7 +57,7 @@ public class EncounterManager : MonoBehaviour {
 		// You can still animate the inventory by controlling the dummy object
 		InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
 
-		Example();
+		//Example();
 	}
 
 
@@ -75,6 +79,21 @@ public class EncounterManager : MonoBehaviour {
 
 	private void Update() {
 		currentState.UpdateLogic();
+	}
+
+	public void ChangeState() {
+		if (currentState.GetType() == typeof(IntroState)) {
+			ChangeState(PlayerTurn);
+		} else if (currentState.GetType() == typeof(PlayerTurnState)) {
+			ChangeState(EnemyTurn);
+		} else if (currentState.GetType() == typeof(EnemyTurnState)) { 
+			if (currentEncounter >= numberOfEncounters) {
+				SceneManager.LoadScene("InventoryTestScene");
+			} else {
+				currentEncounter++;
+				ChangeState(Dialogue);
+			}
+		}
 	}
 
 	public void ChangeState(BaseState newState) {

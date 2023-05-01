@@ -15,6 +15,8 @@ public class EnemyTurnState : BaseState {
     }
 
     public override void Exit() {
-        // TODO Resolve challenges
+        // TODO Something like:
+        //InventoryUI.Instance.FinishTurn();
+        // to remove the damage marks
     }
 }

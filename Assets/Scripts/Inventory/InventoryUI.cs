@@ -361,10 +361,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	}
 
 
-	public void StartEncounter()
-	{
+	public void StartEncounter() {
 		PopulateActions();
-		SceneManager.LoadScene("Encounter");
+		if (SceneManager.GetActiveScene().name == "InventoryTestScene") {
+			SceneManager.LoadScene("Encounter");
+		} else {
+			EncounterManager.Instance.ChangeState();
+		}
 	}
 
 	public void FinishTurn()
