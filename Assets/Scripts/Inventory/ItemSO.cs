@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/Inventory/ItemSO")]
 public class ItemSO : ScriptableObject
@@ -29,4 +29,6 @@ public class ItemSO : ScriptableObject
 	public Sprite Icon;
 
 	public ItemUI Prefab;
+
+	public UnityEvent<int, ItemUI> ActionEvent;
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour, IPointerDownHandler
@@ -18,13 +19,11 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private Transform _itemParent;
 	public Transform ItemParent { get { return _itemParent; } }
 
-
-
-	[SerializeField]
 	private EventSystem _eventSystem;
 
 	[SerializeField]
 	private GraphicRaycaster _graphicRaycaster;
+	public GraphicRaycaster GraphicRaycaster { get { return _graphicRaycaster; } }
 
 	[SerializeField]
 	private ItemSO[] _itemSOs;
@@ -44,14 +43,29 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	private int _lastDamagedGroup;
 
+	private Transform _followTarget;
+
 	[SerializeField]
 	private TextMeshProUGUI _scoreTMP;
+
+	[SerializeField]
+	private ShopUI _shop;
+
+	[SerializeField]
+	private ActionUI _actionBar;
+
 
 	private void Awake()
 	{
 		if (Instance == null)
 		{
 			Instance = this;
+
+			DontDestroyOnLoad(transform.parent);
+		}
+		else
+		{
+			Debug.LogError("Tried to load an additional Inventory");
 		}
 	}
 
@@ -81,6 +95,12 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		{
 			_slotGroupDict.Add(_slotGroups[i].GroupType, _slotGroups[i]);
 		}
+	}
+
+
+	public void SetFollowTarget(Transform target)
+	{
+		_followTarget = target;
 	}
 
 
@@ -246,10 +266,68 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_lastDamagedGroup = 0;
 			}
 
-			DamageSlotInGroup(_slotGroupDict[_slotGroups[_lastDamagedGroup].GroupType].GroupType);
+			//DamageSlotInGroup(_slotGroupDict[_slotGroups[_lastDamagedGroup].GroupType].GroupType);
 
 
 			TallyScore();
 		}
+
+		if (Input.GetKeyDown(KeyCode.Period))
+		{
+			SceneManager.LoadScene("Encounter");
+		}
+
+
+		if (_followTarget != null)
+		{
+			transform.position = _followTarget.position;
+		}
 	}
+
+
+	public void SetInventoryState(InventoryState state)
+	{
+		switch (state)
+		{
+			case InventoryState.Hidden:
+			{
+				gameObject.SetActive(false);
+				break;
+			}
+			case InventoryState.Load:
+			{
+				gameObject.SetActive(true);
+				_shop.gameObject.SetActive(true);
+				_actionBar.gameObject.SetActive(false);
+
+				break;
+			}
+			case InventoryState.Encounter:
+			{
+				gameObject.SetActive(true);
+				_shop.gameObject.SetActive(false);
+				_actionBar.gameObject.SetActive(true);
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+	}
+
+
+	public void PopulateActions()
+	{
+		//_actionBar.PopulateActions()
+	}
+}
+
+
+public enum InventoryState
+{
+	None,
+	Load,
+	Encounter,
+	Hidden
 }

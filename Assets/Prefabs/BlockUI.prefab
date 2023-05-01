@@ -243,3 +243,5 @@ MonoBehaviour:
   _damageIcon: {fileID: 5352416735003050680}
   _raycastDebug: {fileID: 7263637272606735840}
   _raycastTarget: {fileID: 2016957033646082077}
+  _damageSprite: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
+  _potentialDamageSprite: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}

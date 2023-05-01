@@ -8,9 +8,11 @@ public class ItemUI : MonoBehaviour
 {
 	[SerializeField]
 	private BlockUI[] _blocks;
+	public BlockUI[] Blocks { get { return _blocks; } }
 
 	[SerializeField]
 	private Image _icon;
+	public Image Icon {  get { return _icon; } }
 
 	private ItemSO _itemSO;
 	public ItemSO ItemSO { get { return _itemSO; } }
@@ -45,6 +47,11 @@ public class ItemUI : MonoBehaviour
 		_slots = new SlotUI[_blocks.Length];
 
 		_isDamaged = false;
+
+		for (int i = 0; i < _blocks.Length; i++)
+		{
+			_blocks[i].SetupAsItem();
+		}
 	}
 
 
@@ -61,6 +68,13 @@ public class ItemUI : MonoBehaviour
 
 		bool valid = true;
 		bool foundTypeMatch = false;
+
+		if (_eventSystem == null)
+		{
+			_eventSystem = EventSystem.current;
+
+			_ptrEventData = new PointerEventData(_eventSystem);
+		}
 
 		for (int i = 0; i < _blocks.Length; i++)
 		{

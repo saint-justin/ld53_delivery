@@ -15,6 +15,7 @@ public class EncounterManager : MonoBehaviour {
     private System.Random random;
     private int currentEncounter;
 
+    [SerializeField] private GameObject inventoryPrefab;
 
     // States
     public IntroState Dialogue { get; private set; }
@@ -28,6 +29,13 @@ public class EncounterManager : MonoBehaviour {
         PlayerTurn = new PlayerTurnState(this);
         EnemyTurn = new EnemyTurnState(this);
         ChangeState(Dialogue);
+
+        if (InventoryUI.Instance == null)
+		{
+            Instantiate(inventoryPrefab);
+		}
+        InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
+        InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
     }
 
 

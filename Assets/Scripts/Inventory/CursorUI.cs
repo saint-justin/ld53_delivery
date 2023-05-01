@@ -67,6 +67,10 @@ public class CursorUI : MonoBehaviour
 
 		_wasValid = false;
 		_item.SetColor(_invalidColor);
+
+		SetToolTip(null);
+
+		_prevHit = null;
 	}
 
 
@@ -137,7 +141,6 @@ public class CursorUI : MonoBehaviour
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);
 		transform.localPosition = Vector3.Lerp(transform.localPosition, position, 1f - _smoothing);
 
-
 		if (_item != null)
 		{
 			// Need to temporarilly move the item to the cursor location to perform the raycasts
@@ -171,6 +174,11 @@ public class CursorUI : MonoBehaviour
 		}
 		else
 		{
+			if (_eventSystem == null)
+			{
+				_ptrEventData = new PointerEventData(EventSystem.current);
+			}
+
 			_ptrEventData.position = transform.position;
 
 			List<RaycastResult> results = new List<RaycastResult>();

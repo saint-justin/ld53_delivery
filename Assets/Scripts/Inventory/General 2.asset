@@ -24,3 +24,18 @@ MonoBehaviour:
   Value: 5
   Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
+  ActionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
+        m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
+        m_MethodName: UseAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
