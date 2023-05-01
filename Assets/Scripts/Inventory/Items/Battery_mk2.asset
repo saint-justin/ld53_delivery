@@ -17,6 +17,7 @@ MonoBehaviour:
   ItemID: 502
   GroupType: 1
   Durable: 0
+  RequireTarget: 0
   Energy: 0
   Heat: 1
   Water: 0

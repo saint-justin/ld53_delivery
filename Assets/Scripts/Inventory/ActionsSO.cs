@@ -61,6 +61,8 @@ public class ActionsSO : ScriptableObject
 	{
 		Debug.Log(item.name + " UseShield");
 
+		InventoryUI.Instance.GenerateShield(item.ItemSO.AbilityValue);
+
 		EncounterManager.Instance.ApplyShield(item);
 
 	}

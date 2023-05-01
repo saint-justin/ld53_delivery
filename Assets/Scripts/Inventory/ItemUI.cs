@@ -113,7 +113,19 @@ public class ItemUI : MonoBehaviour
 						valid = false;
 					}
 
-					if (_itemSO.GroupType == GroupType.General || _itemSO.GroupType == slot.GroupType)
+					if (_itemSO.GroupType == slot.GroupType)
+					{
+						foundTypeMatch = true;
+					}
+					else if(_itemSO.GroupType == GroupType.General)
+					{
+						foundTypeMatch = true;
+					}
+					else if (_itemSO.GroupType == GroupType.Hat)
+					{
+						foundTypeMatch = true;
+					}
+					else if (_itemSO.GroupType == GroupType.Belt)
 					{
 						foundTypeMatch = true;
 					}

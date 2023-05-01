@@ -39,9 +39,18 @@ public class ShopUI : MonoBehaviour
 
 		for (int i = 0; i < itemSOs.Length; i++)
 		{
-			ShopButton button = Instantiate(_buttonPrefab, _shopTabDict[itemSOs[i].GroupType].transform, false);
+			if (_shopTabDict.TryGetValue(itemSOs[i].GroupType, out GameObject tab))
+			{
+				ShopButton button = Instantiate(_buttonPrefab, tab.transform, false);
 
-			button.Initialize(itemSOs[i]);
+				button.Initialize(itemSOs[i]);
+			}
+			else
+			{
+				Debug.Log("No tab for type: " + itemSOs[i].GroupType + " " + itemSOs[i].name);
+			}
+
+			
 		}
 	}
 

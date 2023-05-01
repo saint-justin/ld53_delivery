@@ -10,11 +10,15 @@ public class ItemSO : ScriptableObject
 
 	public string Description;
 
+	public string AbilityMessage;
+
 	public int ItemID;
 
 	public GroupType GroupType;
 
 	public bool Durable;
+
+	public bool RequireTarget;
 
 	public int Energy;
 

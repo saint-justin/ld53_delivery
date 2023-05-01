@@ -28,10 +28,20 @@ public class ActionUI : MonoBehaviour
 
 		for (int i = 0; i < items.Count; i++)
 		{
-			ActionButton button = Instantiate(_buttonPrefab, _actionTab, false);
-			button.Initialize(items[i]);
+			
 
-			_actions.Add(button);
+			if (items[i].ItemSO.ActionEvent != null)
+			{
+				string funcName = items[i].ItemSO.ActionEvent.GetPersistentMethodName(0);
+
+				if (funcName != null && funcName != "")
+				{
+					ActionButton button = Instantiate(_buttonPrefab, _actionTab, false);
+					button.Initialize(items[i]);
+
+					_actions.Add(button);
+				}
+			}
 		}
 	}
 }

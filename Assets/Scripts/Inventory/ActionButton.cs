@@ -63,17 +63,31 @@ public class ActionButton : MonoBehaviour
 
 	public void OnPress()
 	{
-		if (_useable)
+		if (_useable && !InventoryUI.Instance.ShieldPending)
 		{
-			if (_actionEvent != null)
+			if (_itemSO.RequireTarget)
 			{
-				Debug.Log("Setting item to used");
-				_item.IsUsed = true;
-				_actionEvent.Invoke(0, _item);
+				EncounterManager.Instance.SetSelectedAbility(OnUseAbility);
 			}
-
-			SetUseable(false);
+			else
+			{
+				OnUseAbility();
+			}
+			
 		}
+	}
+
+
+	private void OnUseAbility()
+	{
+		if (_actionEvent != null)
+		{
+			//Debug.Log("Setting item to used");
+			_item.IsUsed = true;
+			_actionEvent.Invoke(0, _item);
+		}
+
+		SetUseable(false);
 	}
 
 

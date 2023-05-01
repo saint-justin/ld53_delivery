@@ -20,10 +20,36 @@ public class DamagePlacement : MonoBehaviour
 
 	private float _slotWidth = 30f;
 
+	public List<Shield> _shields;
+
 
 	private void Start()
 	{
+		
+
+		Initialize();
+	}
+
+
+	public void Initialize()
+	{
 		_offset = Vector3.zero;
+
+		if (_shields != null)
+		{
+			for (int i = 0; i < _shields.Count; i++)
+			{
+				Destroy(_shields[i]);
+			}
+		}
+
+		_shields = new List<Shield>();
+	}
+
+
+	public void AddShield(Shield shield)
+	{
+		_shields.Add(shield);
 	}
 
 
@@ -58,6 +84,8 @@ public class DamagePlacement : MonoBehaviour
 
 	public void ApplyDamage(bool damage, bool hidePattern = true)
 	{
+		EnableShieldRaycast(true);
+
 		for (int i = 0; i < _patterns.Length; i++)
 		{
 			_patterns[i].ApplyDamage(damage);
@@ -66,6 +94,8 @@ public class DamagePlacement : MonoBehaviour
 		gameObject.SetActive(!hidePattern);
 
 		InventoryUI.Instance.TallyItemAttributes();
+
+		EnableShieldRaycast(false);
 	}
 
 
@@ -157,5 +187,17 @@ public class DamagePlacement : MonoBehaviour
 		}
 
 		transform.position = _offset + _followTarget.position;
+	}
+
+
+	private void EnableShieldRaycast(bool enable)
+	{
+		if (_shields != null)
+		{
+			for (int i = 0; i < _shields.Count; i++)
+			{
+				_shields[i].EnableRaycastTarget(enable);
+			}
+		}
 	}
 }

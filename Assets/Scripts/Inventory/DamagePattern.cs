@@ -79,6 +79,12 @@ public class DamagePattern : MonoBehaviour
 
 			for (int hit = 0; hit < hits.Count; hit++)
 			{
+				if (hits[hit].gameObject != null && hits[hit].gameObject.CompareTag("Shield"))
+				{
+					break;
+				}
+
+
 				if (hits[hit].gameObject != null && hits[hit].gameObject.CompareTag("Slot"))
 				{
 					SlotUI slot = hits[hit].gameObject.GetComponent<SlotUI>();

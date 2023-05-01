@@ -12,9 +12,11 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	public bool LockInventory { get; set; }
 	public bool LockBelt { get; set; }
+	public bool ShieldPending { get; set; }
 
 	[SerializeField]
 	private CursorUI _cursor;
+	public CursorUI Cursor { get { return _cursor; } }
 
 	[SerializeField]
 	private Transform _itemParent;
@@ -36,6 +38,9 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	[SerializeField]
 	private SlotGroupUI[] _slotGroups;
 
+	[SerializeField]
+	private Shield[] _shieldPrefabs;
+
 	private Dictionary<int, ItemSO> _itemDict;
 
 	private Dictionary<GroupType, SlotGroupUI> _slotGroupDict;
@@ -45,6 +50,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private int _lastDamagedGroup;
 
 	private Transform _followTarget;
+
+	private Shield _pendingShield;
 
 	[SerializeField]
 	private TextMeshProUGUI _scoreTMP;
@@ -117,21 +124,23 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	{
 		GameObject hitObject = eventData.pointerCurrentRaycast.gameObject;
 
-		if (LockInventory || hitObject == null)
+		if (hitObject == null)
 		{
 			return;
 		}
 
-		if (_ptrRaycastDebug != null)
+		SlotUI slot = hitObject.GetComponent<SlotUI>();
+		BlockUI block = hitObject.GetComponent<BlockUI>();
+		Shield shield = hitObject.GetComponent<Shield>();
+
+		if (shield != null)
 		{
-			_ptrRaycastDebug.position = eventData.position;
+			Debug.Log("Clicked Shield");
 		}
 
 
 		if (eventData.button == PointerEventData.InputButton.Right)
 		{
-			SlotUI slot = hitObject.GetComponent<SlotUI>();
-
 			if (slot != null)
 			{
 				slot.SetDamaged(!slot.IsDamaged);
@@ -141,40 +150,43 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		}
 
 
-		if (_cursor.HasItem && hitObject.CompareTag("Slot"))
+		if (ShieldPending)
 		{
-			//Debug.Log("Found item with Slot tag");
-			SlotUI slot = hitObject.GetComponent<SlotUI>();
-
 			if (slot != null)
 			{
-				ItemUI item = _cursor.CurrentItem;
-
-				if (_cursor.PlaceItem(slot))
-				{
-					AddItemToInventory(item);
-
-					TallyItemAttributes();
-				}
+				PlaceShield(slot.transform.position);
 			}
-			
-		}
-		else if (!_cursor.HasItem && hitObject.CompareTag("Item"))
-		{
-			BlockUI block = hitObject.GetComponent<BlockUI>();
-
-			if (block != null)
+			else if (block != null)
 			{
-				ItemUI item = block.GetParentItem;
+				PlaceShield(block.transform.position);
+			}
 
-				if (!LockBelt || !item.IsTouchingGroupType(GroupType.Belt))
-				{
-					_cursor.PickItem(block.GetParentItem);
+			return;
+		}
 
-					RemoveItemFromInventory(block.GetParentItem);
+		if (_cursor.HasItem && slot != null)
+		{
+			ItemUI item = _cursor.CurrentItem;
 
-					TallyItemAttributes();
-				}
+			if (_cursor.PlaceItem(slot))
+			{
+				AddItemToInventory(item);
+
+				TallyItemAttributes();
+			}
+
+		}
+		else if (!_cursor.HasItem && block != null)
+		{
+			ItemUI item = block.GetParentItem;
+
+			if (!LockBelt || !item.IsTouchingGroupType(GroupType.Belt))
+			{
+				_cursor.PickItem(block.GetParentItem);
+
+				RemoveItemFromInventory(block.GetParentItem);
+
+				TallyItemAttributes();
 			}
 		}
 	}
@@ -312,6 +324,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_shop.gameObject.SetActive(true);
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(false);
+				_damagePlacement.gameObject.SetActive(false);
 				LockInventory = false;
 				LockBelt = false;
 				break;
@@ -323,7 +336,6 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(true);
 				_rearrange.gameObject.SetActive(false);
 				_damagePlacement.gameObject.SetActive(true);
-				//_damagePlacement.TestPlacement();
 				LockInventory = false;
 				LockBelt = true;
 				break;
@@ -334,7 +346,19 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_shop.gameObject.SetActive(false);
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(true);
+				_damagePlacement.gameObject.SetActive(false);
 				LockInventory = false;
+				LockBelt = true;
+				break;
+			}
+			case InventoryState.Transition:
+			{
+				gameObject.SetActive(true);
+				_shop.gameObject.SetActive(false);
+				_actionBar.gameObject.SetActive(false);
+				_rearrange.gameObject.SetActive(false);
+				_damagePlacement.gameObject.SetActive(false);
+				LockInventory = true;
 				LockBelt = true;
 				break;
 			}
@@ -392,6 +416,45 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	{
 		_damagePlacement.MovePattern(direction, spaces);
 	}
+
+
+	public void GenerateShield(int abilityValue)
+	{
+		if (_pendingShield == null && abilityValue < _shieldPrefabs.Length)
+		{
+			_pendingShield = Instantiate(_shieldPrefabs[abilityValue], _itemParent, false);
+			_pendingShield.Initialize();
+			_damagePlacement.AddShield(_pendingShield);
+
+			ShieldPending = true;
+		}
+	}
+
+
+	public void PlaceShield(Vector3 position)
+	{
+		if (_pendingShield != null)
+		{
+			_pendingShield.PlaceShield(position);
+
+			_pendingShield = null;
+		}
+
+		ShieldPending = false;
+	}
+
+
+	public void CancelShield()
+	{
+		if (_pendingShield != null)
+		{
+			Destroy(_pendingShield);
+
+			_pendingShield = null;
+
+			ShieldPending = false;
+		}
+	}
 }
 
 
@@ -401,7 +464,8 @@ public enum InventoryState
 	Load,
 	Encounter,
 	Hidden,
-	Rearrange
+	Rearrange,
+	Transition
 }
 
 

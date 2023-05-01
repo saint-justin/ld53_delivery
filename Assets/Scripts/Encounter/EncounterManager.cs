@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class EncounterManager : MonoBehaviour {
@@ -24,6 +26,11 @@ public class EncounterManager : MonoBehaviour {
 
 	private ItemUI currentlySelectedEquipment;
 
+	private Action SelectedAbility;
+
+	[SerializeField]
+	private Transform _staticDummy;
+
 	// States
 	public IntroState Dialogue { get; private set; }
 	public PlayerTurnState PlayerTurn { get; private set; }
@@ -37,7 +44,7 @@ public class EncounterManager : MonoBehaviour {
 		PlayerTurn = new PlayerTurnState(this);
 		EnemyTurn = new EnemyTurnState(this);
 		currentEncounter = 1;
-		ChangeState(Dialogue);
+		//ChangeState(Dialogue);
 
 		if (Instance == null)
 		{
@@ -55,31 +62,21 @@ public class EncounterManager : MonoBehaviour {
 		//}
 
 		// You can still animate the inventory by controlling the dummy object
-		InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
+		//InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
+		InventoryUI.Instance.SetFollowTarget(_staticDummy);
 
 		//Example();
 	}
 
 
-	private void Example()
-	{
-		// Change Inventory state (Different UI panels)
-		InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
-
-		// You can use this to place an overlay showing potential damage for a challenge
-		InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.InitialEffect);
-
-		// This can be used to apply that damage that was set
-		//InventoryUI.Instance.ApplyDamage();
-
-		// Show the first challenge potential damage
-		//InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.Challenge1);
-	}
+	
 
 
 	private void Update() {
-		currentState.UpdateLogic();
+		//currentState.UpdateLogic();
 	}
+
+	#region StateMachine
 
 	public void ChangeState() {
 		if (currentState.GetType() == typeof(IntroState)) {
@@ -123,7 +120,7 @@ public class EncounterManager : MonoBehaviour {
 		return possibleEnemies[elem];
 	}
 
-
+	#endregion
 
 	// These are used by Player Action Callbacks that can be selected on items to handle encounter side logic
 	// Most of the inventory logic is already handled but things like changing Player stats are not
@@ -167,6 +164,45 @@ public class EncounterManager : MonoBehaviour {
 		// This may be a passive effect or only used in between encounters
 	}
 
+
+	// Used by Inventory to set the current Ability
+	public void SetSelectedAbility(Action ability)
+	{
+		SelectedAbility = ability;
+	}
+
+	public void UseSelectedAbility()
+	{
+		if (SelectedAbility != null)
+		{
+			SelectedAbility.Invoke();
+			SelectedAbility = null;
+		}
+	}
+
+
+	//public void Select
+
+	#endregion
+
+
+	#region Test
+
+
+	private void Example()
+	{
+		// Change Inventory state (Different UI panels)
+		InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
+
+		// You can use this to place an overlay showing potential damage for a challenge
+		InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.InitialEffect);
+
+		// This can be used to apply that damage that was set
+		//InventoryUI.Instance.ApplyDamage();
+
+		// Show the first challenge potential damage
+		//InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.Challenge1);
+	}
 	#endregion
 }
 

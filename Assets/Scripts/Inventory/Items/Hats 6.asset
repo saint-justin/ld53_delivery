@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
+  m_Name: Hats 6
+  m_EditorClassIdentifier: 
+  Name: Hats F
+  Description: 
+  AbilityMessage: 
+  ItemID: 706
+  GroupType: 5
+  Durable: 0
+  RequireTarget: 0
+  Energy: 0
+  Heat: 0
+  Water: 0
+  Ammo: 0
+  Value: 10
+  AbilityValue: 0
+  Icon: {fileID: 21300000, guid: 9296a1cb0386a4e448d4db8f4e4a38b3, type: 3}
+  Prefab: {fileID: 8203217213311966569, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  ActionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

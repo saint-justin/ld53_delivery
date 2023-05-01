@@ -423,6 +423,7 @@ MonoBehaviour:
   _followTarget: {fileID: 8655991124811592415}
   _canvas: {fileID: 8655991125041969234}
   _raycaster: {fileID: 8655991125041969260}
+  _shields: []
 --- !u!1 &1989373069726090976
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,19 +1764,33 @@ MonoBehaviour:
   _itemParent: {fileID: 8655991125270325927}
   _graphicRaycaster: {fileID: 8655991125041969260}
   _itemSOs:
+  - {fileID: 11400000, guid: 100a1f7dd65eb4947b8a67a1015c9c4f, type: 2}
   - {fileID: 11400000, guid: e7ec4351a3351c44498edf3dd174235b, type: 2}
   - {fileID: 11400000, guid: 096f7a181c9f0004383435df26639af6, type: 2}
   - {fileID: 11400000, guid: 01336d6940e0c084b96c2e0de339712d, type: 2}
   - {fileID: 11400000, guid: 42faf052ca534d84f81d6d9e20b81dc2, type: 2}
-  - {fileID: 11400000, guid: 6bd0f58f09008334aa4b07f974c8793a, type: 2}
-  - {fileID: 11400000, guid: 4bd12a00b20139e468efdc0f2e58a43e, type: 2}
-  - {fileID: 11400000, guid: 10820191f4293bc4ab6310480dfd5bcf, type: 2}
+  - {fileID: 11400000, guid: 52fdc5b4be7cf7a4b8ca4dc77dd5b9ce, type: 2}
+  - {fileID: 11400000, guid: ddc17b160313aa84e85a2afdca10a4f2, type: 2}
+  - {fileID: 11400000, guid: 74d01ace76c2c47488c725d224a14b4c, type: 2}
+  - {fileID: 11400000, guid: 3d38ce7ecfacb944881850ae699292f6, type: 2}
+  - {fileID: 11400000, guid: 8583588f5bcab464b98cc78c2b41caf6, type: 2}
+  - {fileID: 11400000, guid: 75a4a4b03f5ca7640884fe87bf96f6b1, type: 2}
+  - {fileID: 11400000, guid: 1e986c412dfa20544b4f4ef31d681772, type: 2}
+  - {fileID: 11400000, guid: b91e6396bb63c6743856325b7449af4e, type: 2}
+  - {fileID: 11400000, guid: 05c6ccd9ce50d4f40a7c4f4fbefa3fe8, type: 2}
+  - {fileID: 11400000, guid: 108b3b6dfcbc6b949a690f3bb256ff7a, type: 2}
   - {fileID: 11400000, guid: 2da98076ef7b7404b98a622c39e92023, type: 2}
+  - {fileID: 11400000, guid: 516cb688b51547d4e87ccb2d07d87558, type: 2}
   - {fileID: 11400000, guid: b943837d3ac98e04995e022f17d011cb, type: 2}
+  - {fileID: 11400000, guid: 245b9bd2164781044ad1ada0eeb8a641, type: 2}
+  - {fileID: 11400000, guid: b05ef602670c5b246974ea3e64e3a230, type: 2}
+  - {fileID: 11400000, guid: d10403de7a6591343958dce0a1c42285, type: 2}
   - {fileID: 11400000, guid: 7696046f46ed460458105f44aa0bc058, type: 2}
   - {fileID: 11400000, guid: 3007110222205634e900a8ea09cedb06, type: 2}
   - {fileID: 11400000, guid: c0c19c6487f3b6641938458377963f9c, type: 2}
   - {fileID: 11400000, guid: b2a3f9f4b010f964bb968aee094e376c, type: 2}
+  - {fileID: 11400000, guid: 138a5dacf5737464fb2652c8aaa820a2, type: 2}
+  - {fileID: 11400000, guid: c5f3dea6b5bcfa2418ee7b6fb69708d5, type: 2}
   _ptrRaycastDebug: {fileID: 8655991125747970055}
   _slotGroups:
   - {fileID: 8655991124956548661}
@@ -1783,6 +1798,9 @@ MonoBehaviour:
   - {fileID: 8655991125954428452}
   - {fileID: 8655991125040547796}
   - {fileID: 8655991124990701764}
+  _shieldPrefabs:
+  - {fileID: 6529727600796988955, guid: e87e4ffcb71d692488952007e09d5112, type: 3}
+  - {fileID: 8648638175290129209, guid: 2281ac1324c62ba49ba3eaa1a8ec1ce1, type: 3}
   _scoreTMP: {fileID: 8655991126518969620}
   _shop: {fileID: 8655991124966121288}
   _actionBar: {fileID: 4249669257716548408}
