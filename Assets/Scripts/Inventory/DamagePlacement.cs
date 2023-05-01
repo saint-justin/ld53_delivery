@@ -80,22 +80,22 @@ public class DamagePlacement : MonoBehaviour
 		{
 			case 0:
 			{
-				_offset.y += spaces * _slotWidth * _canvas.scaleFactor;
+				_offset.y -= spaces * _slotWidth * _canvas.scaleFactor;
 				break;
 			}
 			case 1:
 			{
-				_offset.x -= spaces * _slotWidth * _canvas.scaleFactor;
+				_offset.x += spaces * _slotWidth * _canvas.scaleFactor;
 				break;
 			}
 			case 2:
 			{
-				_offset.y -= spaces * _slotWidth * _canvas.scaleFactor;
+				_offset.y += spaces * _slotWidth * _canvas.scaleFactor;
 				break;
 			}
 			case 3:
 			{
-				_offset.x += spaces * _slotWidth * _canvas.scaleFactor;
+				_offset.x -= spaces * _slotWidth * _canvas.scaleFactor;
 				break;
 			}
 		}

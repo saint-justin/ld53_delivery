@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
-  m_Name: General 2
+  m_Name: Battery_mk1
   m_EditorClassIdentifier: 
-  Name: General 2
-  Description: Use Action
-  ItemID: 1
+  Name: Battery mk1
+  Description: Generate Energy at the expense of increased Heat
+  ItemID: 501
   GroupType: 1
   Durable: 0
   Energy: 0
-  Heat: 0
+  Heat: 1
   Water: 0
   Ammo: 0
-  AbilityValue: 1
-  Value: 5
-  Icon: {fileID: 21300000, guid: 8235f2c4bae86ba419e0a0cc56c5a6d4, type: 3}
-  Prefab: {fileID: 729130036243146398, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
+  Value: 0
+  AbilityValue: 2
+  Icon: {fileID: 21300000, guid: 45ad3ac1cb6d5da48a1ea6ba854b0cf4, type: 3}
+  Prefab: {fileID: 729130036243146398, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
   ActionEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
         m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
-        m_MethodName: UseAction
+        m_MethodName: GenerateEnergy
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

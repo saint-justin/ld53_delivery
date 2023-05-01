@@ -421,7 +421,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _followTarget: {fileID: 8655991124811592415}
-  _damageSO: {fileID: 11400000, guid: 7942dce93e686ca4896c8d863abd81a5, type: 2}
   _canvas: {fileID: 8655991125041969234}
   _raycaster: {fileID: 8655991125041969260}
 --- !u!1 &1989373069726090976
@@ -1764,13 +1763,19 @@ MonoBehaviour:
   _itemParent: {fileID: 8655991125270325927}
   _graphicRaycaster: {fileID: 8655991125041969260}
   _itemSOs:
-  - {fileID: 11400000, guid: 3007110222205634e900a8ea09cedb06, type: 2}
+  - {fileID: 11400000, guid: e7ec4351a3351c44498edf3dd174235b, type: 2}
+  - {fileID: 11400000, guid: 096f7a181c9f0004383435df26639af6, type: 2}
+  - {fileID: 11400000, guid: 01336d6940e0c084b96c2e0de339712d, type: 2}
+  - {fileID: 11400000, guid: 42faf052ca534d84f81d6d9e20b81dc2, type: 2}
   - {fileID: 11400000, guid: 6bd0f58f09008334aa4b07f974c8793a, type: 2}
   - {fileID: 11400000, guid: 4bd12a00b20139e468efdc0f2e58a43e, type: 2}
   - {fileID: 11400000, guid: 10820191f4293bc4ab6310480dfd5bcf, type: 2}
-  - {fileID: 11400000, guid: b2a3f9f4b010f964bb968aee094e376c, type: 2}
+  - {fileID: 11400000, guid: 2da98076ef7b7404b98a622c39e92023, type: 2}
   - {fileID: 11400000, guid: b943837d3ac98e04995e022f17d011cb, type: 2}
   - {fileID: 11400000, guid: 7696046f46ed460458105f44aa0bc058, type: 2}
+  - {fileID: 11400000, guid: 3007110222205634e900a8ea09cedb06, type: 2}
+  - {fileID: 11400000, guid: c0c19c6487f3b6641938458377963f9c, type: 2}
+  - {fileID: 11400000, guid: b2a3f9f4b010f964bb968aee094e376c, type: 2}
   _ptrRaycastDebug: {fileID: 8655991125747970055}
   _slotGroups:
   - {fileID: 8655991124956548661}

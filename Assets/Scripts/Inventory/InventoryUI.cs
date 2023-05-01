@@ -383,6 +383,12 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	{
 		_damagePlacement.ApplyDamage(true, true);
 	}
+
+
+	public void MoveSpaces(int direction, int spaces)
+	{
+		_damagePlacement.MovePattern(direction, spaces);
+	}
 }
 
 

@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
-  m_Name: Left Side Jets
+  m_Name: Large Jump Jets
   m_EditorClassIdentifier: 
-  Name: Small Jump Jets
-  Description: Move 1-3 Spaces Up
-  ItemID: 105
+  Name: Large Jump Jets
+  Description: Move 2-5 Spaces Up
+  ItemID: 302
   GroupType: 3
   Durable: 0
-  Energy: 2
-  Heat: 4
+  Energy: 3
+  Heat: 6
   Water: 0
   Ammo: 0
-  AbilityValue: 1
-  Value: 30
-  Icon: {fileID: 21300000, guid: 4ffec6abc8698c3469af97d782a49f3e, type: 3}
-  Prefab: {fileID: 729130036243146398, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
+  Value: 0
+  AbilityValue: 2
+  Icon: {fileID: 21300000, guid: 6f82c572a0ad20649b47dd9ae76159bb, type: 3}
+  Prefab: {fileID: 729130036243146398, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
   ActionEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
         m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
-        m_MethodName: Move
+        m_MethodName: MoveSpaces
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

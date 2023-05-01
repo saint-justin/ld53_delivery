@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fbb0c8bd71ccb46b3882167a70737e, type: 3}
+  m_Name: Battery_mk3
+  m_EditorClassIdentifier: 
+  Name: Battery mk3
+  Description: Generate Energy at the expense of increased Heat
+  ItemID: 503
+  GroupType: 1
+  Durable: 0
+  Energy: 0
+  Heat: 1
+  Water: 0
+  Ammo: 0
+  Value: 0
+  AbilityValue: 4
+  Icon: {fileID: 21300000, guid: 3f8fd7568847a92409b0c8eb9fdcc8c8, type: 3}
+  Prefab: {fileID: 729130036243146398, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
+  ActionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
+        m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
+        m_MethodName: GenerateEnergy
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

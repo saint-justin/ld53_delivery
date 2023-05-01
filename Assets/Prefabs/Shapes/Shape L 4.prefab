@@ -86,9 +86,9 @@ GameObject:
   - component: {fileID: 8203217213311966582}
   - component: {fileID: 8203217213311966571}
   - component: {fileID: 8203217213311966569}
-  - component: {fileID: -3698476904661878253}
+  - component: {fileID: 8352690313389864686}
   m_Layer: 0
-  m_Name: Item T 4
+  m_Name: Shape L 4
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   - {fileID: 5376121596146746044}
   - {fileID: 3737881878769489144}
   _icon: {fileID: 720910579656712874}
---- !u!114 &-3698476904661878253
+--- !u!114 &8352690313389864686
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,6 +156,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810d6af938196d94ca0595660a4eec4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blocks:
+  - {fileID: 154844086741492686}
+  - {fileID: 6684171407171411213}
+  - {fileID: 5376121596146746044}
+  - {fileID: 3737881878769489144}
+  _icon: {fileID: 720910579656712874}
 --- !u!1001 &1193670748653539292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -233,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8736560354626724259, guid: a940511457c58d54c90204bf3dad89d2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8736560354626724259, guid: a940511457c58d54c90204bf3dad89d2, type: 3}
       propertyPath: m_AnchoredPosition.y
