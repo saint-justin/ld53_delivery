@@ -13,7 +13,7 @@ public class PlayerTurnState : BaseState {
         InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
 
         // You can use this to place an overlay showing potential damage for a challenge
-        InventoryUI.Instance.PlaceChallengeDamage(encounterManager.ExampleDamageSO.InitialEffect);
+        //InventoryUI.Instance.PlaceChallengeDamage(encounterManager.ExampleDamageSO.InitialEffect);
     }
 
     public override void Exit() {

@@ -86,6 +86,12 @@ public class DamagePlacement : MonoBehaviour
 	{
 		EnableShieldRaycast(true);
 
+		if (_patterns == null)
+		{
+			Debug.LogError("Damage Pattern not set");
+			return;
+		}
+
 		for (int i = 0; i < _patterns.Length; i++)
 		{
 			_patterns[i].ApplyDamage(damage);

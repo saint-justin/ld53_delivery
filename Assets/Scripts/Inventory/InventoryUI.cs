@@ -336,7 +336,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(true);
 				_rearrange.gameObject.SetActive(false);
 				_damagePlacement.gameObject.SetActive(true);
-				LockInventory = false;
+				LockInventory = true;
 				LockBelt = true;
 				break;
 			}
@@ -394,9 +394,28 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		}
 	}
 
+	public void FinishLoading()
+	{
+		if (EncounterManager.Instance != null)
+		{
+			EncounterManager.Instance.LoadEncounter(0);
+		}
+		else
+		{
+			SetInventoryState(InventoryState.Encounter);
+		}
+
+		PopulateActions();
+	}
+
 	public void FinishTurn()
 	{
-		SetInventoryState(InventoryState.Rearrange);
+		EncounterManager.Instance.EndEncounter();
+	}
+
+	public void FinishRearange()
+	{
+		EncounterManager.Instance.NextEncounter();
 	}
 
 

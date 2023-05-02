@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ActionUI : MonoBehaviour
@@ -15,6 +16,12 @@ public class ActionUI : MonoBehaviour
 
 	[SerializeField]
 	private List<ActionButton> _actions;
+
+	[SerializeField]
+	private GameObject _messageBox;
+
+	[SerializeField]
+	private TextMeshProUGUI _messageTMP;
 
 
 	public void PopulateActions(List<ItemUI> items)
@@ -37,11 +44,20 @@ public class ActionUI : MonoBehaviour
 				if (funcName != null && funcName != "")
 				{
 					ActionButton button = Instantiate(_buttonPrefab, _actionTab, false);
-					button.Initialize(items[i]);
+					button.Initialize(items[i], _messageBox, _messageTMP, this);
 
 					_actions.Add(button);
 				}
 			}
+		}
+	}
+
+
+	public void SetAllBorderColors(Color color)
+	{
+		foreach (ActionButton button in _actions)
+		{
+			button.SetBorderColor(color);
 		}
 	}
 }

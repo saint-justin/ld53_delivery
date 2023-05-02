@@ -13,4 +13,14 @@ public class EncounterSO : ScriptableObject
     public List<Challenge> Challenges { get => challenges; set => challenges = value; }
     public List<GameObject> EnemyAttacks { get => enemyAttacks; set => enemyAttacks = value; }
     public Sprite EnemySprite { get => enemySprite; set => enemySprite = value; }
+
+
+    public DamagePattern[] InitialDamage;
+    public DamagePattern[] ChallengeDamage1;
+    public DamagePattern[] ChallengeDamage2;
+    public DamagePattern[] ChallengeDamage3;
+
+    public string[] ChallengeText;
+
+    public int[] Points;
 }

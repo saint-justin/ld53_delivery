@@ -42,9 +42,21 @@ public class ActionButton : MonoBehaviour
 
 	private bool _isUsed;
 
+	private GameObject _messageBox;
+	private TextMeshProUGUI _messageTMP;
 
-	public void Initialize(ItemUI item)
+	private ActionUI _parent;
+
+
+
+	public void Initialize(ItemUI item, GameObject messageBox, TextMeshProUGUI messageTMP, ActionUI parent)
 	{
+		_parent = parent;
+
+		_messageBox = messageBox;
+
+		_messageTMP = messageTMP;
+
 		_item = item;
 		_itemSO = item.ItemSO;
 
@@ -65,9 +77,15 @@ public class ActionButton : MonoBehaviour
 	{
 		if (_useable && !InventoryUI.Instance.ShieldPending)
 		{
+			_parent.SetAllBorderColors(Color.white);
+
 			if (_itemSO.RequireTarget)
 			{
 				EncounterManager.Instance.SetSelectedAbility(OnUseAbility);
+
+				_messageTMP.text = "Select A Target";
+
+				_border.color = Color.green;
 			}
 			else
 			{
@@ -85,6 +103,10 @@ public class ActionButton : MonoBehaviour
 			//Debug.Log("Setting item to used");
 			_item.IsUsed = true;
 			_actionEvent.Invoke(0, _item);
+
+			_messageTMP.text = _item.ItemSO.AbilityMessage;
+
+			_border.color = Color.white;
 		}
 
 		SetUseable(false);
@@ -105,5 +127,11 @@ public class ActionButton : MonoBehaviour
 		{
 			_background.color = _unuseableColor;
 		}
+	}
+
+
+	public void SetBorderColor(Color color)
+	{
+		_border.color = color;
 	}
 }

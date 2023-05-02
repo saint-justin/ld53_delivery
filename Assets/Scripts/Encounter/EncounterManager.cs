@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -19,7 +20,8 @@ public class EncounterManager : MonoBehaviour {
 
 	[SerializeField] private GameObject inventoryPrefab;
 	public static EncounterManager Instance;
-	[SerializeField] private DamageSO _exampleDamageSO;
+
+	private EncounterSO _currentEncounterSO;
 
 	private PlayerStats _playerStats;
 	public PlayerStats CurrentStats { get { return _playerStats; } }
@@ -28,14 +30,27 @@ public class EncounterManager : MonoBehaviour {
 
 	private Action SelectedAbility;
 
+	private int _selectedChallenge;
+
 	[SerializeField]
 	private Transform _staticDummy;
+
+	[SerializeField]
+	private Challenge[] _challenges;
+
+	[SerializeField]
+	private GameObject _challengePanel;
+
+	[SerializeField]
+	private GameObject _scorePanel;
+
+	[SerializeField]
+	private TextMeshProUGUI _endScore;
 
 	// States
 	public IntroState Dialogue { get; private set; }
 	public PlayerTurnState PlayerTurn { get; private set; }
 	public EnemyTurnState EnemyTurn { get; private set; }
-    public DamageSO ExampleDamageSO { get => _exampleDamageSO;}
     public ItemUI CurrentlySelectedEquipment { get => currentlySelectedEquipment; set => currentlySelectedEquipment = value; }
 
     private void Awake() {
@@ -64,6 +79,9 @@ public class EncounterManager : MonoBehaviour {
 		// You can still animate the inventory by controlling the dummy object
 		//InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
 		InventoryUI.Instance.SetFollowTarget(_staticDummy);
+
+		_challengePanel.SetActive(false);
+		_scorePanel.SetActive(false);
 
 		//Example();
 	}
@@ -138,6 +156,8 @@ public class EncounterManager : MonoBehaviour {
 
 		// Need to implement a way to damage the selected challenge
 		Debug.Log($"Dealt {damage} Damage");
+
+		_challenges[_selectedChallenge].DealDamage(damage);
 	}
 
 
@@ -180,29 +200,112 @@ public class EncounterManager : MonoBehaviour {
 		}
 	}
 
-
-	//public void Select
-
 	#endregion
 
 
 	#region Test
 
-
-	private void Example()
+	public void EndEncounter()
 	{
+		InventoryUI.Instance.ApplyDamage();
+
+		if (!CheckChallenge(0))
+		{
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage1);
+			InventoryUI.Instance.ApplyDamage();
+		}
+		else if (!CheckChallenge(1))
+		{
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage2);
+			InventoryUI.Instance.ApplyDamage();
+		}
+		else if (!CheckChallenge(2))
+		{
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage3);
+			InventoryUI.Instance.ApplyDamage();
+		}
+
+		InventoryUI.Instance.SetInventoryState(InventoryState.Rearrange);
+	}
+
+
+	private bool CheckChallenge(int index)
+	{
+		return _challenges[index].CheckChallenge();
+	}
+
+
+	public void NextEncounter()
+	{
+		currentEncounter++;
+
+		if (currentEncounter < possibleEnemies.Count)
+		{
+			LoadEncounter(currentEncounter);
+		}
+		else
+		{
+			EndScreen();
+		}
+	}
+
+	public void LoadEncounter(int index)
+	{
+		_challengePanel.SetActive(true);
+
+
+		if (index >= possibleEnemies.Count)
+		{
+			Debug.LogError("Error");
+			return;
+		}
+
+
+		_currentEncounterSO = possibleEnemies[index];
+
+		if (_currentEncounterSO == null)
+		{
+			Debug.LogError("Error");
+			return;
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			_challenges[i].SetChallenge(_currentEncounterSO.ChallengeText[i], _currentEncounterSO.Points[i]);
+		}
+
 		// Change Inventory state (Different UI panels)
 		InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
 
 		// You can use this to place an overlay showing potential damage for a challenge
-		InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.InitialEffect);
-
-		// This can be used to apply that damage that was set
-		//InventoryUI.Instance.ApplyDamage();
-
-		// Show the first challenge potential damage
-		//InventoryUI.Instance.PlaceChallengeDamage(_exampleDamageSO.Challenge1);
+		InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.InitialDamage);
 	}
+
+
+	public void SelectChallenge(int i)
+	{
+		_selectedChallenge = i;
+
+		if (SelectedAbility != null)
+		{
+			SelectedAbility.Invoke();
+		}
+	}
+
+
+	public void EndScreen()
+	{
+		InventoryUI.Instance.SetInventoryState(InventoryState.Hidden);
+
+		_challengePanel.SetActive(false);
+
+		_scorePanel.SetActive(true);
+
+		ItemTally tally = InventoryUI.Instance.TallyItemAttributes();
+
+		_endScore.text = $"Final Score: {tally.Value}";
+	}
+
 	#endregion
 }
 
