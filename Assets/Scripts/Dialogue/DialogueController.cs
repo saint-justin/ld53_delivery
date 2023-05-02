@@ -110,7 +110,7 @@ public class DialogueController : MonoBehaviour
             // Disable when all lines have been read
             gameObject.SetActive(false);
 
-            SceneManager.LoadScene("InventoryTestScene");
+            SceneManager.LoadScene("Encounter");
         }
     }
 
