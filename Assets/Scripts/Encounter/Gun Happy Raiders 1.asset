@@ -17,21 +17,15 @@ MonoBehaviour:
   enemySprite: {fileID: 0}
   dialogue: []
   InitialDamage:
+  - {fileID: 9066782519276235834, guid: 66a2d80fffeadc2479d8bfacdd052e4b, type: 3}
   - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
-  - {fileID: 9066782519276235834, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
-  - {fileID: 8352690313389864686, guid: 732c67c1cf745314f8801269339d3839, type: 3}
   ChallengeDamage1:
-  - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
-  - {fileID: 9066782519276235834, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
-  - {fileID: 8352690313389864686, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
+  - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
   ChallengeDamage2:
-  - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
-  - {fileID: 9066782519276235834, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
-  - {fileID: 8352690313389864686, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  - {fileID: 8352690313389864686, guid: dc7aa4cb1452b834395814b65d6dd103, type: 3}
   ChallengeDamage3:
-  - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
-  - {fileID: 9066782519276235834, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
-  - {fileID: 8352690313389864686, guid: 732c67c1cf745314f8801269339d3839, type: 3}
+  - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
   ChallengeText:
   - Deal 5 Damage
   - Deal 3 Damage

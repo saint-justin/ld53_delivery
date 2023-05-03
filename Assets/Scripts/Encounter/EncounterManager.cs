@@ -58,7 +58,7 @@ public class EncounterManager : MonoBehaviour {
 		Dialogue = new IntroState(this, enemyAnimator, playerAnimator);
 		PlayerTurn = new PlayerTurnState(this);
 		EnemyTurn = new EnemyTurnState(this);
-		currentEncounter = 1;
+		currentEncounter = 0;
 		//ChangeState(Dialogue);
 
 		if (Instance == null)
@@ -214,12 +214,12 @@ public class EncounterManager : MonoBehaviour {
 			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage1);
 			InventoryUI.Instance.ApplyDamage();
 		}
-		else if (!CheckChallenge(1))
+		if (!CheckChallenge(1))
 		{
 			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage2);
 			InventoryUI.Instance.ApplyDamage();
 		}
-		else if (!CheckChallenge(2))
+		if (!CheckChallenge(2))
 		{
 			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage3);
 			InventoryUI.Instance.ApplyDamage();

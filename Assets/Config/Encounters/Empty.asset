@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b3f144fce593194e8c2479d1e39e45b, type: 3}
-  m_Name: GunHappyRaider
+  m_Name: Empty
   m_EditorClassIdentifier: 
   challenges: []
   enemyAttacks:

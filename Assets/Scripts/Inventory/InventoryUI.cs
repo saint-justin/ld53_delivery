@@ -164,7 +164,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			return;
 		}
 
-		if (_cursor.HasItem && slot != null)
+		if (!LockInventory && _cursor.HasItem && slot != null)
 		{
 			ItemUI item = _cursor.CurrentItem;
 
@@ -176,7 +176,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			}
 
 		}
-		else if (!_cursor.HasItem && block != null)
+		else if (!LockInventory && !_cursor.HasItem && block != null)
 		{
 			ItemUI item = block.GetParentItem;
 
@@ -316,11 +316,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			case InventoryState.Hidden:
 			{
 				gameObject.SetActive(false);
+				UnityEngine.Cursor.visible = true;
 				break;
 			}
 			case InventoryState.Load:
 			{
 				gameObject.SetActive(true);
+				UnityEngine.Cursor.visible = false;
 				_shop.gameObject.SetActive(true);
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(false);
@@ -332,6 +334,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			case InventoryState.Encounter:
 			{
 				gameObject.SetActive(true);
+				UnityEngine.Cursor.visible = false;
 				_shop.gameObject.SetActive(false);
 				_actionBar.gameObject.SetActive(true);
 				_rearrange.gameObject.SetActive(false);
@@ -343,6 +346,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			case InventoryState.Rearrange:
 			{
 				gameObject.SetActive(true);
+				UnityEngine.Cursor.visible = false;
 				_shop.gameObject.SetActive(false);
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(true);
@@ -354,6 +358,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			case InventoryState.Transition:
 			{
 				gameObject.SetActive(true);
+				UnityEngine.Cursor.visible = false;
 				_shop.gameObject.SetActive(false);
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(false);

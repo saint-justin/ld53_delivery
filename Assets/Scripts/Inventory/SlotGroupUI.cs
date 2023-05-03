@@ -16,10 +16,13 @@ public class SlotGroupUI : MonoBehaviour
 
 	public int GroupSize { get { return _slots.Length; } }
 
-	
+	private void Awake()
+	{
+		Initialize();
+	}
 
 
-	private void OnValidate()
+	private void Initialize()
 	{
 		if (_slots != null)
 		{
@@ -32,6 +35,11 @@ public class SlotGroupUI : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	private void OnValidate()
+	{
+		Initialize();
 	}
 
 
