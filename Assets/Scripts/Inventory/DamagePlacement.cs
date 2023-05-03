@@ -8,6 +8,9 @@ public class DamagePlacement : MonoBehaviour
 	[SerializeField]
 	private Transform _followTarget;
 
+	[SerializeField]
+	private int _maxPlaceAttempts;
+
 	private DamagePattern[] _patterns;
 
 	[SerializeField]
@@ -55,9 +58,10 @@ public class DamagePlacement : MonoBehaviour
 
 	public void SetDamagePatterns(DamagePattern[] damagePatterns)
 	{
+		_offset = Vector3.zero;
+
 		if (damagePatterns == null)
 		{
-			Debug.LogWarning("Attempted to set empty damagePatternArray");
 			return;
 		}
 
@@ -65,7 +69,7 @@ public class DamagePlacement : MonoBehaviour
 		{
 			for (int i = 0; i < _patterns.Length; i++)
 			{
-				Destroy(_patterns[i]);
+				Destroy(_patterns[i].gameObject);
 			}
 		}
 
@@ -75,7 +79,7 @@ public class DamagePlacement : MonoBehaviour
 		{
 			_patterns[i] = Instantiate(damagePatterns[i], transform, false);
 
-			_patterns[i].Initialize(_raycaster, _canvas);
+			_patterns[i].Initialize(_raycaster, _canvas, _maxPlaceAttempts);
 		}
 
 		PlaceDamagePatterns();
@@ -147,6 +151,7 @@ public class DamagePlacement : MonoBehaviour
 			if (!_patterns[i].FindValidSpot(transform.position))
 			{
 				Debug.LogWarning("PlaceDamagePatterns failed to find a valid location for damage");
+				_patterns[i].gameObject.SetActive(false);
 			}
 		}
 

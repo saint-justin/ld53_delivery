@@ -135,7 +135,7 @@ public class CursorUI : MonoBehaviour
 	}
 
 
-	private void Update()
+	private void FixedUpdate()
 	{
 		// Move the item towards the current mouse position
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out Vector2 position);

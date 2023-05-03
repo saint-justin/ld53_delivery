@@ -22,7 +22,9 @@ public class DamagePattern : MonoBehaviour
 
 	Vector3 _raycastPosition;
 
-	public void Initialize(GraphicRaycaster raycaster, Canvas canvas)
+	private int _maxAttempts;
+
+	public void Initialize(GraphicRaycaster raycaster, Canvas canvas, int maxAttempts)
 	{
 		if (raycaster == null || canvas == null)
 		{
@@ -51,6 +53,8 @@ public class DamagePattern : MonoBehaviour
 		_canvas = canvas;
 
 		_validLocation = false;
+
+		_maxAttempts = maxAttempts;
 	}
 
 
@@ -122,7 +126,7 @@ public class DamagePattern : MonoBehaviour
 
 			if (hits.Count > 0)
 			{
-				Debug.Log(hits.Count);
+				//Debug.Log(hits.Count);
 			}
 
 			for (int hit = 0; hit < hits.Count; hit++)
@@ -163,7 +167,7 @@ public class DamagePattern : MonoBehaviour
 
 		int tries = 0;
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < _maxAttempts; i++)
 		{
 			tries++;
 
