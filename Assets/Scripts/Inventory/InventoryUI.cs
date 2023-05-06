@@ -10,6 +10,10 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 {
 	public static InventoryUI Instance;
 
+	[SerializeField]
+	private Canvas _canvas;
+	public float ScaleFactor { get { return _canvas.scaleFactor; } }
+
 	public bool LockInventory { get; set; }
 	public bool LockBelt { get; set; }
 	public bool ShieldPending { get; set; }
@@ -57,6 +61,12 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private TextMeshProUGUI _scoreTMP;
 
 	[SerializeField]
+	private TextMeshProUGUI _heatTMP;
+
+	[SerializeField]
+	private TextMeshProUGUI _timeTMP;
+
+	[SerializeField]
 	private ShopUI _shop;
 
 	[SerializeField]
@@ -67,6 +77,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	[SerializeField]
 	private DamagePlacement _damagePlacement;
+
+	
 
 
 	private void Awake()
@@ -111,6 +123,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		{
 			_slotGroupDict.Add(_slotGroups[i].GroupType, _slotGroups[i]);
 		}
+
+		SetTimeAndHeat(0, 0);
 	}
 
 
@@ -128,6 +142,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		{
 			return;
 		}
+
+		Debug.Log($" {hitObject.gameObject.name} with parent {hitObject.transform.parent.gameObject.name}");
 
 		SlotUI slot = hitObject.GetComponent<SlotUI>();
 		BlockUI block = hitObject.GetComponent<BlockUI>();
@@ -277,7 +293,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			}
 		}
 
-		_scoreTMP.text = "$ " + tally.Value.ToString();
+		_scoreTMP.text = $"Expected Yield: {tally.Value} CR";
 
 		return tally;
 	}
@@ -421,24 +437,71 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	public void FinishRearange()
 	{
 		EncounterManager.Instance.NextEncounter();
+
+		PopulateActions();
 	}
 
 
-	public void PlaceChallengeDamage(DamagePattern[] challenge)
+	public void PlaceChallengeDamage(DamagePattern[] challenge, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat)
 	{
-		_damagePlacement.SetDamagePatterns(challenge);
+		_damagePlacement.SetDamagePatterns(challenge, pos, visible, avoidDamaged, asHeat);
 	}
 
 
 	public void ApplyDamage()
 	{
-		_damagePlacement.ApplyDamage(true, true);
+		_damagePlacement.ApplyDamage(true);
 	}
 
 
 	public void MoveSpaces(int direction, int spaces)
 	{
 		_damagePlacement.MovePattern(direction, spaces);
+	}
+
+
+	public void RemoveDamagedItems()
+	{
+		for (int i = _items.Count - 1; i >= 0; i--)
+		{
+			if (_items[i].IsDamaged && !_items[i].ItemSO.Durable)
+			{
+				Destroy(_items[i].gameObject);
+
+				_items.RemoveAt(i);
+			}
+		}
+	}
+
+
+	public void DestroyCheapestCargo()
+	{
+		int minValue = int.MaxValue;
+		int minIndex = -1;
+
+		for (int i =0; i < _items.Count; i++)
+		{
+			if (_items[i].ItemSO.GroupType == GroupType.Belt && _items[i].ItemSO.Value < minValue)
+			{
+				minValue = _items[i].ItemSO.Value;
+				minIndex = i;
+			}
+		}
+
+		if (minIndex != -1)
+		{
+			Destroy(_items[minIndex].gameObject);
+
+			_items.RemoveAt(minIndex);
+		}
+	}
+
+
+	public void SetTimeAndHeat(int time, int heat)
+	{
+		_timeTMP.text = $"{time} Hrs Late";
+
+		_heatTMP.text = $"Heat: {heat}%";
 	}
 
 

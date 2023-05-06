@@ -5,41 +5,58 @@ using UnityEngine.UI;
 
 public class Challenge : MonoBehaviour 
 {
-    [SerializeField] private Text _challengeText;
+    [SerializeField]
+    private Text _challengeText;
+    
     [SerializeField]
     private Text _statusText;
 
-    private bool resolved;
-    private int resolvePoints;
-    private int currentPoints;
+    [SerializeField]
+    private Image _defeatIcon;
+
+    private StatType _challengeType;
+    public StatType ChallengeType { get { return _challengeType; } }
+
+    private int _value;
+    private int _maxValue;
 
 
-    public void SetChallenge(string description, int goal)
+    public void SetChallenge(ChallengeData data)
 	{
-        _challengeText.text = description;
+        _challengeText.text = data.ChallengeText;
 
-        currentPoints = goal;
-        resolvePoints = goal;
+        _challengeType = data.ChallengeType;
 
-        _statusText.text = $"{currentPoints} / {resolvePoints}";
+        _maxValue = data.ChallengeValue;
+        _value = data.ChallengeValue;
+
+        _statusText.text = $"{_value} / {_maxValue}";
+
+        _defeatIcon.enabled = false;
 	}
 
 
-    public void DealDamage(int points)
+    public void DealDamage(StatType type, int points)
 	{
-        currentPoints -= points;
-
-        if (currentPoints < 0)
+        if (type != _challengeType)
 		{
-            currentPoints = 0;
+            return;
 		}
 
-        _statusText.text = $"{currentPoints} / {resolvePoints}";
+        _value -= points;
+
+        if (_value <= 0)
+		{
+            _value = 0;
+            _defeatIcon.enabled = true;
+		}
+
+        _statusText.text = $"{_value} / {_maxValue}";
     }
 
 
     public bool CheckChallenge()
 	{
-        return currentPoints == 0;
+        return _value == 0;
 	}
 }

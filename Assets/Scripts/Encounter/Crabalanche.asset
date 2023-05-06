@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3f144fce593194e8c2479d1e39e45b, type: 3}
+  m_Name: Crabalanche
+  m_EditorClassIdentifier: 
+  ChallengesData:
+  - ChallengeText: Initial Effect
+    ChallengeType: 0
+    ChallengeValue: 0
+    AvoidDamagedSlots: 0
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: -75}
+    DamagePatterns:
+    - {fileID: -3698476904661878253, guid: a42b953426c367b4fb5c6b22ed057ac9, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Douse with Water
+    ChallengeType: 3
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Deal 1 Damage
+    ChallengeType: 1
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Deal 1 Damage
+    ChallengeType: 1
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  HeatDamage:
+  - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}

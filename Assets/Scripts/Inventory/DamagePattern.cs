@@ -24,7 +24,7 @@ public class DamagePattern : MonoBehaviour
 
 	private int _maxAttempts;
 
-	public void Initialize(GraphicRaycaster raycaster, Canvas canvas, int maxAttempts)
+	public void Initialize(GraphicRaycaster raycaster, Canvas canvas, int maxAttempts, bool visible)
 	{
 		if (raycaster == null || canvas == null)
 		{
@@ -39,7 +39,7 @@ public class DamagePattern : MonoBehaviour
 
 		for (int i = 0; i < _blocks.Length; i++)
 		{
-			_blocks[i].SetupAsDamage();
+			_blocks[i].SetupAsDamage(visible);
 		}
 
 		_icon.enabled = false;
@@ -103,7 +103,7 @@ public class DamagePattern : MonoBehaviour
 	}
 
 
-	public bool CheckPlacement()
+	public bool CheckPlacement(bool avoidDamaged, bool asHeat)
 	{
 		if (_eventSystem == null)
 		{
@@ -119,6 +119,8 @@ public class DamagePattern : MonoBehaviour
 
 			_ptrEventData.position = _blocks[i].transform.position;
 
+			//Debug.Log($"{gameObject.name} Block {i}: {_blocks[i].transform.position}");
+
 			_raycaster.Raycast(_ptrEventData, hits);
 
 			SlotUI slot = null;
@@ -131,15 +133,25 @@ public class DamagePattern : MonoBehaviour
 
 			for (int hit = 0; hit < hits.Count; hit++)
 			{
+				if (hits[hit].gameObject != null)
+				{
+					//Debug.LogError($"Hit {hits[hit].gameObject.name} at {hits[hit].gameObject.transform.position}");
+				}
+
 				if (hits[hit].gameObject != null && hits[hit].gameObject.CompareTag("Slot"))
 				{
 					slot = hits[hit].gameObject.GetComponent<SlotUI>();
 				}
-				
+
 				if (hits[hit].gameObject != null && hits[hit].gameObject.CompareTag("Item"))
 				{
 					block = hits[hit].gameObject.GetComponent<BlockUI>();
 				}
+			}
+
+			if (block != null)
+			{
+				Debug.Log(block.transform.parent.gameObject.name + " " + block.IsDamagePattern);
 			}
 
 			if (block != null && block.IsDamagePattern)
@@ -148,7 +160,7 @@ public class DamagePattern : MonoBehaviour
 			}
 
 
-			if (slot == null|| slot.IsDamaged)
+			if (slot == null || (avoidDamaged && slot.IsDamaged) || (asHeat && slot.GroupType == GroupType.Hat))
 			{
 				return false;
 			}
@@ -159,7 +171,7 @@ public class DamagePattern : MonoBehaviour
 	}
 
 
-	public bool FindValidSpot(Vector3 center)
+	public bool FindValidSpot(Vector3 center, bool avoidDamaged, bool asHeat)
 	{
 		EnableRaycastTarget(false);
 
@@ -180,7 +192,7 @@ public class DamagePattern : MonoBehaviour
 
 			transform.position = _raycastPosition + center;
 
-			if (CheckPlacement())
+			if (CheckPlacement(avoidDamaged, asHeat))
 			{
 				Debug.Log($"Placed Damage in {tries} attempts");
 
@@ -189,7 +201,36 @@ public class DamagePattern : MonoBehaviour
 			}
 		}
 
-		//gameObject.SetActive(_validLocation);
+
+		if (!_validLocation)
+		{
+			for (int i = 0; i < 120; i++)
+			{
+				tries++;
+
+				int x = (i % 10) - 5;
+
+				int y = (i / 10) - 5;
+
+				_raycastPosition.x = (x * 30 + 15) * _canvas.scaleFactor;
+
+				_raycastPosition.y = y * 30 * _canvas.scaleFactor;
+
+				transform.position = _raycastPosition + center;
+
+				if (CheckPlacement(avoidDamaged, asHeat))
+				{
+					Debug.Log($"Placed Damage in {tries} attempts");
+
+					_validLocation = true;
+					break;
+				}
+			}
+		}
+		
+
+
+		gameObject.SetActive(_validLocation);
 		EnableRaycastTarget(true);
 
 		return _validLocation;
@@ -202,5 +243,22 @@ public class DamagePattern : MonoBehaviour
 		{
 			_blocks[i].EnableRayCast(enable);
 		}
+	}
+
+
+	public void SetVisible(bool visible)
+	{
+		foreach(BlockUI block in _blocks)
+		{
+			block.SetWarningVisible(visible);
+		}
+	}
+
+
+	public void SetPosition(Vector2 position, Vector2 center)
+	{
+		_validLocation = true;
+
+		transform.position = position * _canvas.scaleFactor + center;
 	}
 }

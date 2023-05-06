@@ -81,7 +81,7 @@ public class ActionButton : MonoBehaviour
 
 			if (_itemSO.RequireTarget)
 			{
-				EncounterManager.Instance.SetSelectedAbility(OnUseAbility);
+				EncounterManager.Instance.SetSelectedAbility(_itemSO.AbilityType, OnUseAbility);
 
 				_messageTMP.text = "Select A Target";
 

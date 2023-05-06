@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3f144fce593194e8c2479d1e39e45b, type: 3}
+  m_Name: MeteorSwarm
+  m_EditorClassIdentifier: 
+  ChallengesData:
+  - ChallengeText: Initial Effect
+    ChallengeType: 0
+    ChallengeValue: 0
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Deal 1 Damage
+    ChallengeType: 1
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Deal 1 Damage
+    ChallengeType: 1
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  - ChallengeText: Deal 3 Damage
+    ChallengeType: 1
+    ChallengeValue: 1
+    AvoidDamagedSlots: 1
+    IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
+    DamagePatterns:
+    - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
+    EffectType: 1
+    EffectValue: 0
+  HeatDamage:
+  - {fileID: 9066782519276235834, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}

@@ -21,21 +21,23 @@ public class DamagePlacement : MonoBehaviour
 
 	private Vector3 _offset;
 
-	private float _slotWidth = 30f;
+	private float _slotWidth;
 
 	public List<Shield> _shields;
+
+	public bool PendingPlacement;
 
 
 	private void Start()
 	{
-		
-
 		Initialize();
 	}
 
 
 	public void Initialize()
 	{
+		_slotWidth = 30f;
+
 		_offset = Vector3.zero;
 
 		if (_shields != null)
@@ -56,7 +58,7 @@ public class DamagePlacement : MonoBehaviour
 	}
 
 
-	public void SetDamagePatterns(DamagePattern[] damagePatterns)
+	public void SetDamagePatterns(DamagePattern[] damagePatterns, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat)
 	{
 		_offset = Vector3.zero;
 
@@ -79,14 +81,17 @@ public class DamagePlacement : MonoBehaviour
 		{
 			_patterns[i] = Instantiate(damagePatterns[i], transform, false);
 
-			_patterns[i].Initialize(_raycaster, _canvas, _maxPlaceAttempts);
+			_patterns[i].Initialize(_raycaster, _canvas, _maxPlaceAttempts, visible);
 		}
 
-		PlaceDamagePatterns();
+		Debug.Log($"{gameObject.name} active: {gameObject.activeInHierarchy}");
+
+		PlaceDamagePatterns(pos, avoidDamaged, asHeat);
+		//StartCoroutine(DelayedPlace(pos, avoidDamaged, asHeat));
 	}
 
 
-	public void ApplyDamage(bool damage, bool hidePattern = true)
+	public void ApplyDamage(bool damage)
 	{
 		EnableShieldRaycast(true);
 
@@ -100,8 +105,6 @@ public class DamagePlacement : MonoBehaviour
 		{
 			_patterns[i].ApplyDamage(damage);
 		}
-
-		gameObject.SetActive(!hidePattern);
 
 		InventoryUI.Instance.TallyItemAttributes();
 
@@ -142,20 +145,34 @@ public class DamagePlacement : MonoBehaviour
 	}
 
 
-	public void PlaceDamagePatterns()
+	public void PlaceDamagePatterns(Vector2 pos, bool avoidDamaged, bool asHeat)
 	{
+		if (pos != Vector2.zero)
+		{
+			_patterns[0].SetPosition(pos, transform.position);
+			//Debug.Log("Placed By Position");
+			return;
+		}
+
+		//Debug.Log("Placed By Random");
+
 		EnableRaycastTarget(true);
 
 		for (int i = 0; i < _patterns.Length; i++)
 		{
-			if (!_patterns[i].FindValidSpot(transform.position))
+			if (i > 0)
 			{
-				Debug.LogWarning("PlaceDamagePatterns failed to find a valid location for damage");
+				//Debug.Log("Raycast enabled " + _patterns[i - 1].IsRaycastEnabled());
+			}
+
+			if (!_patterns[i].FindValidSpot(transform.position, avoidDamaged, asHeat))
+			{
+				//Debug.LogWarning("PlaceDamagePatterns failed to find a valid location for damage");
 				_patterns[i].gameObject.SetActive(false);
 			}
 		}
 
-		EnableRaycastTarget(false);
+		//EnableRaycastTarget(false);
 	}
 
 
@@ -164,6 +181,8 @@ public class DamagePlacement : MonoBehaviour
 		for (int i = 0; i < _patterns.Length; i++)
 		{
 			_patterns[i].EnableRaycastTarget(enable);
+
+			//Debug.Log($"Set {_patterns[i].gameObject.name} RaycastEnable to: {enable}");
 		}
 	}
 
@@ -172,12 +191,12 @@ public class DamagePlacement : MonoBehaviour
 	{
 		if ( Input.GetKeyDown(KeyCode.O))
 		{
-			ApplyDamage(true, true);
+			ApplyDamage(true);
 		}
 
 		if (Input.GetKeyDown(KeyCode.P))
 		{
-			PlaceDamagePatterns();
+			PlaceDamagePatterns(Vector2.zero, true, false);
 		}
 
 		if (Input.GetKeyDown(KeyCode.W))
@@ -209,6 +228,23 @@ public class DamagePlacement : MonoBehaviour
 			{
 				_shields[i].EnableRaycastTarget(enable);
 			}
+		}
+	}
+
+
+	private IEnumerator DelayedPlace(Vector2 pos, bool avoidDamaged, bool asHeat)
+	{
+		yield return new WaitForSeconds(0.06f);
+
+		PlaceDamagePatterns(pos, avoidDamaged, asHeat);
+	}
+
+
+	public void SetVisible(bool visible)
+	{
+		foreach(DamagePattern pattern in _patterns)
+		{
+			pattern.SetVisible(visible);
 		}
 	}
 }

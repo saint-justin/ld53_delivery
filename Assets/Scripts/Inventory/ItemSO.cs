@@ -30,6 +30,8 @@ public class ItemSO : ScriptableObject
 
 	public int Value;
 
+	public StatType AbilityType;
+
 	public int AbilityValue;
 
 	public Sprite Icon;

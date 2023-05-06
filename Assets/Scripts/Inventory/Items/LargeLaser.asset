@@ -24,6 +24,7 @@ MonoBehaviour:
   Water: 0
   Ammo: 0
   Value: 0
+  AbilityType: 1
   AbilityValue: 3
   Icon: {fileID: 21300000, guid: 331a3699d12930141a74da6607697882, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 70ee846dde6668b4abb92d05785a79d7, type: 3}

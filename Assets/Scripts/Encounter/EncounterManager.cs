@@ -29,6 +29,7 @@ public class EncounterManager : MonoBehaviour {
 	private ItemUI currentlySelectedEquipment;
 
 	private Action SelectedAbility;
+	private StatType SelectedAbilityType;
 
 	private int _selectedChallenge;
 
@@ -70,20 +71,12 @@ public class EncounterManager : MonoBehaviour {
 
 	private void Start()
 	{
-		// This is a safe guard to allow testing from the encounter scene directly (not working currently)
-		//if (InventoryUI.Instance == null)
-		//{
-		//	Instantiate(inventoryPrefab);
-		//}
-
 		// You can still animate the inventory by controlling the dummy object
 		//InventoryUI.Instance.SetFollowTarget(playerAnimator.transform);
 		InventoryUI.Instance.SetFollowTarget(_staticDummy);
 
 		_challengePanel.SetActive(false);
 		_scorePanel.SetActive(false);
-
-		//Example();
 	}
 
 
@@ -154,10 +147,7 @@ public class EncounterManager : MonoBehaviour {
 
 		int damage = UtilityFunctions.RollDice(dieChoice);
 
-		// Need to implement a way to damage the selected challenge
-		Debug.Log($"Dealt {damage} Damage");
-
-		_challenges[_selectedChallenge].DealDamage(damage);
+		_challenges[_selectedChallenge].DealDamage(StatType.Damage, damage);
 	}
 
 
@@ -185,19 +175,17 @@ public class EncounterManager : MonoBehaviour {
 	}
 
 
-	// Used by Inventory to set the current Ability
-	public void SetSelectedAbility(Action ability)
+	public void SprayWater(ItemUI item)
 	{
-		SelectedAbility = ability;
+		_challenges[_selectedChallenge].DealDamage(StatType.Water, 1);
 	}
 
-	public void UseSelectedAbility()
+
+	// Used by Inventory to set the current Ability
+	public void SetSelectedAbility(StatType abilityType, Action ability)
 	{
-		if (SelectedAbility != null)
-		{
-			SelectedAbility.Invoke();
-			SelectedAbility = null;
-		}
+		SelectedAbility = ability;
+		SelectedAbilityType = abilityType;
 	}
 
 	#endregion
@@ -207,23 +195,33 @@ public class EncounterManager : MonoBehaviour {
 
 	public void EndEncounter()
 	{
-		InventoryUI.Instance.ApplyDamage();
+		if (_currentEncounterSO.ChallengesData[0].EffectType == StatType.Damage)
+		{
+			InventoryUI.Instance.ApplyDamage();
+		}
 
-		if (!CheckChallenge(0))
+		
+		for (int i = 1; i < _currentEncounterSO.ChallengesData.Length; i++)
 		{
-			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage1);
+			if (!CheckChallenge(i-1))
+			{
+				ApplyEffects(i, true);
+			}
+		}
+
+
+		// Heat Check
+		int heatRoll = UnityEngine.Random.Range(0, 100);
+
+		if (heatRoll < _playerStats.Heat)
+		{
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.HeatDamage, Vector2.zero, false, true, true);
 			InventoryUI.Instance.ApplyDamage();
 		}
-		if (!CheckChallenge(1))
-		{
-			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage2);
-			InventoryUI.Instance.ApplyDamage();
-		}
-		if (!CheckChallenge(2))
-		{
-			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengeDamage3);
-			InventoryUI.Instance.ApplyDamage();
-		}
+
+		InventoryUI.Instance.SetTimeAndHeat(_playerStats.Time, _playerStats.Heat);
+
+		InventoryUI.Instance.RemoveDamagedItems();
 
 		InventoryUI.Instance.SetInventoryState(InventoryState.Rearrange);
 	}
@@ -232,6 +230,33 @@ public class EncounterManager : MonoBehaviour {
 	private bool CheckChallenge(int index)
 	{
 		return _challenges[index].CheckChallenge();
+	}
+
+
+	private void ApplyEffects(int index, bool applyDamage)
+	{
+		if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Damage)
+		{
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengesData[index].DamagePatterns, _currentEncounterSO.ChallengesData[index].DamagePos, !applyDamage, true, false);
+			
+			if (applyDamage)
+			{
+				InventoryUI.Instance.ApplyDamage();
+			}
+			
+		}
+		else if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Heat)
+		{
+			_playerStats.Heat += _currentEncounterSO.ChallengesData[index].EffectValue;
+		}
+		else if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Time)
+		{
+			_playerStats.Time += _currentEncounterSO.ChallengesData[index].EffectValue;
+		}
+		else if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Cargo)
+		{
+			InventoryUI.Instance.DestroyCheapestCargo();
+		}
 	}
 
 
@@ -269,16 +294,24 @@ public class EncounterManager : MonoBehaviour {
 			return;
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 1; i < _currentEncounterSO.ChallengesData.Length; i++)
 		{
-			_challenges[i].SetChallenge(_currentEncounterSO.ChallengeText[i], _currentEncounterSO.Points[i]);
+			_challenges[i-1].gameObject.SetActive(true);
+			_challenges[i-1].SetChallenge(_currentEncounterSO.ChallengesData[i]);
+		}
+
+		for (int i = _currentEncounterSO.ChallengesData.Length; i < 4; i++)
+		{
+			_challenges[i-1].gameObject.SetActive(false);
 		}
 
 		// Change Inventory state (Different UI panels)
 		InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
 
-		// You can use this to place an overlay showing potential damage for a challenge
-		InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.InitialDamage);
+
+		ApplyEffects(0, false);
+
+		InventoryUI.Instance.SetTimeAndHeat(_playerStats.Time, _playerStats.Heat);
 	}
 
 
@@ -286,7 +319,7 @@ public class EncounterManager : MonoBehaviour {
 	{
 		_selectedChallenge = i;
 
-		if (SelectedAbility != null)
+		if (SelectedAbility != null && SelectedAbilityType == _challenges[i].ChallengeType)
 		{
 			SelectedAbility.Invoke();
 		}
@@ -315,4 +348,5 @@ public struct PlayerStats
 	public int Heat;
 	public int Water;
 	public int Ammo;
+	public int Time;
 }

@@ -78,4 +78,10 @@ public class ActionsSO : ScriptableObject
 	{
 		EncounterManager.Instance.HeatSink(item);
 	}
+
+
+	public void SprayWater(int optionCode, ItemUI item)
+	{
+		EncounterManager.Instance.SprayWater(item);
+	}
 }

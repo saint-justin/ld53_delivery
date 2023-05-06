@@ -16,9 +16,9 @@ public class EncounterDisplay : MonoBehaviour {
     }
 
     public void UpdateEncounter(EncounterSO newEncounter) {
-        encounter = newEncounter;
-        image.sprite = encounter.EnemySprite;
-        challenges = encounter.Challenges;
-        enemyAttacks = encounter.EnemyAttacks;
+        //encounter = newEncounter;
+        //image.sprite = encounter.EnemySprite;
+        //challenges = encounter.Challenges;
+        //enemyAttacks = encounter.EnemyAttacks;
     }
 }
