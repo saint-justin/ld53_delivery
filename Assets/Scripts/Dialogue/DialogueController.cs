@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DialogueController : MonoBehaviour
 {
@@ -63,8 +64,11 @@ public class DialogueController : MonoBehaviour
         List<string> parsedLines = new List<string>(sceneScript.text.Split('\n'));
 
         // Updates sprites + badges to reflect speakers
-        character1.GetComponent<SpriteRenderer>().sprite = characterSprites[0];
-        character2.GetComponent<SpriteRenderer>().sprite = characterSprites[1];
+        //character1.GetComponent<SpriteRenderer>().sprite = characterSprites[0];
+        //character2.GetComponent<SpriteRenderer>().sprite = characterSprites[1];
+
+        character1.GetComponent<Image>().sprite = characterSprites[0];
+        character2.GetComponent<Image>().sprite = characterSprites[1];
         string speakers = parsedLines[0];
         speakerBadgeLComponent.text = speakers.Split('/')[0];
         speakerBadgeRComponent.text = speakers.Split('/')[1];
@@ -110,7 +114,7 @@ public class DialogueController : MonoBehaviour
             // Disable when all lines have been read
             gameObject.SetActive(false);
 
-            SceneManager.LoadScene("Encounter");
+            EncounterManager.Instance.EndDialogue();
         }
     }
 

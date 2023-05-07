@@ -78,7 +78,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	[SerializeField]
 	private DamagePlacement _damagePlacement;
 
-	
+	[SerializeField]
+	private GameObject _toolTip;
 
 
 	private void Awake()
@@ -89,7 +90,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 			DontDestroyOnLoad(transform.parent);
 
-			SetInventoryState(InventoryState.Load);
+			SetInventoryState(InventoryState.CursorOnly);
 		}
 		else
 		{
@@ -333,6 +334,16 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			{
 				gameObject.SetActive(false);
 				UnityEngine.Cursor.visible = true;
+				_cursor.gameObject.SetActive(false);
+				_toolTip.SetActive(false);
+				break;
+			}
+			case InventoryState.CursorOnly:
+			{
+				gameObject.SetActive(false);
+				UnityEngine.Cursor.visible = false;
+				_cursor.gameObject.SetActive(true);
+				_toolTip.SetActive(false);
 				break;
 			}
 			case InventoryState.Load:
@@ -343,6 +354,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(false);
 				_damagePlacement.gameObject.SetActive(false);
+				_cursor.gameObject.SetActive(true);
+				_toolTip.SetActive(true);
 				LockInventory = false;
 				LockBelt = false;
 				break;
@@ -355,6 +368,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(true);
 				_rearrange.gameObject.SetActive(false);
 				_damagePlacement.gameObject.SetActive(true);
+				_cursor.gameObject.SetActive(true);
+				_toolTip.SetActive(true);
 				LockInventory = true;
 				LockBelt = true;
 				break;
@@ -367,6 +382,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(true);
 				_damagePlacement.gameObject.SetActive(false);
+				_cursor.gameObject.SetActive(true);
+				_toolTip.SetActive(true);
 				LockInventory = false;
 				LockBelt = true;
 				break;
@@ -379,6 +396,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_actionBar.gameObject.SetActive(false);
 				_rearrange.gameObject.SetActive(false);
 				_damagePlacement.gameObject.SetActive(false);
+				_cursor.gameObject.SetActive(true);
+				_toolTip.SetActive(false);
 				LockInventory = true;
 				LockBelt = true;
 				break;
@@ -427,6 +446,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		}
 
 		PopulateActions();
+
+		//AudioManager.Instance.PlayMusic(_encounterMusic, true);
 	}
 
 	public void FinishTurn()
@@ -442,9 +463,9 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	}
 
 
-	public void PlaceChallengeDamage(DamagePattern[] challenge, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat)
+	public void PlaceChallengeDamage(DamagePattern[] challenge, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat, bool applyImmediate)
 	{
-		_damagePlacement.SetDamagePatterns(challenge, pos, visible, avoidDamaged, asHeat);
+		_damagePlacement.SetDamagePatterns(challenge, pos, visible, avoidDamaged, asHeat, applyImmediate);
 	}
 
 
@@ -552,7 +573,8 @@ public enum InventoryState
 	Encounter,
 	Hidden,
 	Rearrange,
-	Transition
+	Transition,
+	CursorOnly
 }
 
 

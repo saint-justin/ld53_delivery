@@ -81,11 +81,7 @@ public class ActionButton : MonoBehaviour
 
 			if (_itemSO.RequireTarget)
 			{
-				EncounterManager.Instance.SetSelectedAbility(_itemSO.AbilityType, OnUseAbility);
-
-				_messageTMP.text = "Select A Target";
-
-				_border.color = Color.green;
+				OnSelectAbility();
 			}
 			else
 			{
@@ -95,6 +91,17 @@ public class ActionButton : MonoBehaviour
 		}
 	}
 
+
+	private void OnSelectAbility()
+	{
+		EncounterManager.Instance.SetSelectedAbility(_itemSO.AbilityType, OnUseAbility);
+
+		_messageTMP.text = "Select A Target";
+
+		_border.color = Color.green;
+
+		AudioManager.Instance.PlaySound(_itemSO.ChargingSound);
+	}
 
 	private void OnUseAbility()
 	{
@@ -107,6 +114,8 @@ public class ActionButton : MonoBehaviour
 			_messageTMP.text = _item.ItemSO.AbilityMessage;
 
 			_border.color = Color.white;
+
+			AudioManager.Instance.PlaySound(_itemSO.AbilitySound);
 		}
 
 		SetUseable(false);

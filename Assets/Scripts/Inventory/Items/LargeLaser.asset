@@ -43,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 8300000, guid: cdf85b0af8b5e07418b0d7b87fb05b22, type: 3}
+  AbilitySound: {fileID: 8300000, guid: 5c4e778fa81065947a17d40ee3034bbc, type: 3}

@@ -48,6 +48,15 @@ public class EncounterManager : MonoBehaviour {
 	[SerializeField]
 	private TextMeshProUGUI _endScore;
 
+	[SerializeField]
+	private DialogueController _dialogueController;
+
+	[SerializeField]
+	private AudioClip _encounterMusic;
+
+	[SerializeField]
+	private AudioClip[] _crateSounds;
+
 	// States
 	public IntroState Dialogue { get; private set; }
 	public PlayerTurnState PlayerTurn { get; private set; }
@@ -195,6 +204,8 @@ public class EncounterManager : MonoBehaviour {
 
 	public void EndEncounter()
 	{
+		AudioManager.Instance.PlaySound(_crateSounds[UnityEngine.Random.Range(0, _crateSounds.Length)]);
+
 		if (_currentEncounterSO.ChallengesData[0].EffectType == StatType.Damage)
 		{
 			InventoryUI.Instance.ApplyDamage();
@@ -215,8 +226,7 @@ public class EncounterManager : MonoBehaviour {
 
 		if (heatRoll < _playerStats.Heat)
 		{
-			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.HeatDamage, Vector2.zero, false, true, true);
-			InventoryUI.Instance.ApplyDamage();
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.HeatDamage, Vector2.zero, false, true, true, true);
 		}
 
 		InventoryUI.Instance.SetTimeAndHeat(_playerStats.Time, _playerStats.Heat);
@@ -237,13 +247,9 @@ public class EncounterManager : MonoBehaviour {
 	{
 		if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Damage)
 		{
-			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengesData[index].DamagePatterns, _currentEncounterSO.ChallengesData[index].DamagePos, !applyDamage, true, false);
-			
-			if (applyDamage)
-			{
-				InventoryUI.Instance.ApplyDamage();
-			}
-			
+			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.ChallengesData[index].DamagePatterns,
+				_currentEncounterSO.ChallengesData[index].DamagePos,
+				!applyDamage, true, false, applyDamage);
 		}
 		else if (_currentEncounterSO.ChallengesData[index].EffectType == StatType.Heat)
 		{
@@ -323,6 +329,14 @@ public class EncounterManager : MonoBehaviour {
 		{
 			SelectedAbility.Invoke();
 		}
+	}
+
+
+	public void EndDialogue()
+	{
+		InventoryUI.Instance.SetInventoryState(InventoryState.Load);
+
+		AudioManager.Instance.PlayMusic(_encounterMusic, true);
 	}
 
 

@@ -14,14 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Large Jump Jets
   Description: Move 2-5 Spaces Up
+  AbilityMessage: 
   ItemID: 302
   GroupType: 3
   Durable: 0
+  RequireTarget: 0
   Energy: 3
   Heat: 6
   Water: 0
   Ammo: 0
   Value: 0
+  AbilityType: 0
   AbilityValue: 2
   Icon: {fileID: 21300000, guid: 6f82c572a0ad20649b47dd9ae76159bb, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
@@ -40,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 0}
+  AbilitySound: {fileID: 8300000, guid: 70ea759c4bc6f384a8aa5e47113f27d9, type: 3}

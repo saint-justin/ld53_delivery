@@ -39,4 +39,8 @@ public class ItemSO : ScriptableObject
 	public ItemUI Prefab;
 
 	public UnityEvent<int, ItemUI> ActionEvent;
+
+	public AudioClip ChargingSound;
+
+	public AudioClip AbilitySound;
 }

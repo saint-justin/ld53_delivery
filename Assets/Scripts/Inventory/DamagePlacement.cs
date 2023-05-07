@@ -58,7 +58,7 @@ public class DamagePlacement : MonoBehaviour
 	}
 
 
-	public void SetDamagePatterns(DamagePattern[] damagePatterns, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat)
+	public void SetDamagePatterns(DamagePattern[] damagePatterns, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat, bool applyImmediate)
 	{
 		_offset = Vector3.zero;
 
@@ -86,8 +86,14 @@ public class DamagePlacement : MonoBehaviour
 
 		Debug.Log($"{gameObject.name} active: {gameObject.activeInHierarchy}");
 
-		PlaceDamagePatterns(pos, avoidDamaged, asHeat);
-		//StartCoroutine(DelayedPlace(pos, avoidDamaged, asHeat));
+		//PlaceDamagePatterns(pos, avoidDamaged, asHeat);
+
+		//if (applyImmediate)
+		//{
+		//	ApplyDamage(true);
+		//}
+
+		StartCoroutine(DelayedPlace(pos, avoidDamaged, asHeat, applyImmediate));
 	}
 
 
@@ -232,11 +238,16 @@ public class DamagePlacement : MonoBehaviour
 	}
 
 
-	private IEnumerator DelayedPlace(Vector2 pos, bool avoidDamaged, bool asHeat)
+	private IEnumerator DelayedPlace(Vector2 pos, bool avoidDamaged, bool asHeat, bool applyImmediate)
 	{
-		yield return new WaitForSeconds(0.06f);
+		yield return new WaitForSeconds(0.04f);
 
 		PlaceDamagePatterns(pos, avoidDamaged, asHeat);
+
+		if (applyImmediate)
+		{
+			ApplyDamage(true);
+		}
 	}
 
 
