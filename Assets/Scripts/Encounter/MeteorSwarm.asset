@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3f144fce593194e8c2479d1e39e45b, type: 3}
   m_Name: MeteorSwarm
   m_EditorClassIdentifier: 
+  Title: Meteor Swarm
   ChallengesData:
   - ChallengeText: Initial Effect
     ChallengeType: 0

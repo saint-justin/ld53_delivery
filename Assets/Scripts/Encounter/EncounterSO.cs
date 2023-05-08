@@ -13,6 +13,7 @@ public class EncounterSO : ScriptableObject
     //public List<Challenge> Challenges { get => challenges; set => challenges = value; }
     //public List<GameObject> EnemyAttacks { get => enemyAttacks; set => enemyAttacks = value; }
     //public Sprite EnemySprite { get => enemySprite; set => enemySprite = value; }
+    public string Title;
 
     public ChallengeData[] ChallengesData;
 

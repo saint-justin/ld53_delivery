@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MegaShield
   m_EditorClassIdentifier: 
   Name: Shield mk1
-  Description: Apply a 2x2 Shield
-  AbilityMessage: 
+  Description: Apply a 3x3 Shield For 4 Energy and 4 Heat
+  AbilityMessage: Shield Generated
   ItemID: 402
   GroupType: 1
   Durable: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Right Thrusters
   Description: Move 1-3 Spaces Right
-  AbilityMessage: 
+  AbilityMessage: Moved Right
   ItemID: 304
   GroupType: 3
   Durable: 0

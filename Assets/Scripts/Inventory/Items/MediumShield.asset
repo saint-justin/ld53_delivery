@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MediumShield
   m_EditorClassIdentifier: 
   Name: Shield mk1
-  Description: Apply a 2x2 Shield
-  AbilityMessage: 
+  Description: Apply a 2x2 Shield For 2 Energy and 2 Heat
+  AbilityMessage: Shield Generated
   ItemID: 401
   GroupType: 1
   Durable: 0

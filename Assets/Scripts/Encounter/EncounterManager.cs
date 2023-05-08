@@ -52,6 +52,9 @@ public class EncounterManager : MonoBehaviour {
 	private DialogueController _dialogueController;
 
 	[SerializeField]
+	private TextMeshProUGUI _encounterTitle;
+
+	[SerializeField]
 	private AudioClip _encounterMusic;
 
 	[SerializeField]
@@ -86,6 +89,8 @@ public class EncounterManager : MonoBehaviour {
 
 		_challengePanel.SetActive(false);
 		_scorePanel.SetActive(false);
+
+		//EndDialogue();
 	}
 
 
@@ -157,36 +162,124 @@ public class EncounterManager : MonoBehaviour {
 		int damage = UtilityFunctions.RollDice(dieChoice);
 
 		_challenges[_selectedChallenge].DealDamage(StatType.Damage, damage);
+
+		_playerStats.Heat += item.ItemSO.Heat;
+
+		if (_playerStats.Heat > 100)
+		{
+			_playerStats.Heat = 100;
+		}
+
+		_playerStats.Energy -= item.ItemSO.Energy;
+
+		if (_playerStats.Energy < 0)
+		{
+			_playerStats.Energy = 0;
+		}
+
+		if (item.ItemSO.Ammo > 0)
+		{
+			for (int i = 0; i < item.ItemSO.Ammo; i++)
+			{
+				InventoryUI.Instance.DestroySupplies(GroupType.Ammo);
+			}
+		}
+
+		RefreshStats();
 	}
 
 
 	public void MoveSpaces(ItemUI item)
 	{
 		// Actual movement is implemented by the inventory
+		_playerStats.Heat += item.ItemSO.Heat;
+
+		if (_playerStats.Heat > 100)
+		{
+			_playerStats.Heat = 100;
+		}
+
+		_playerStats.Energy -= item.ItemSO.Energy;
+
+		if (_playerStats.Energy < 0)
+		{
+			_playerStats.Energy = 0;
+		}
+
+		RefreshStats();
 	}
 
 
 	public void ApplyShield(ItemUI item)
 	{
 		// Shield placement is handled by inventory
+		_playerStats.Heat += item.ItemSO.Heat;
+
+		if (_playerStats.Heat > 100)
+		{
+			_playerStats.Heat = 100;
+		}
+
+		_playerStats.Energy -= item.ItemSO.Energy;
+
+		if (_playerStats.Energy < 0)
+		{
+			_playerStats.Energy = 0;
+		}
+
+		RefreshStats();
 	}
 
 
 	public void GenerateEnergy(ItemUI item)
 	{
-		// This may be a passive effect will have to ask
+		_playerStats.Energy += item.ItemSO.AbilityValue;
+
+		_playerStats.Heat += item.ItemSO.Heat;
+
+		if (_playerStats.Heat > 100)
+		{
+			_playerStats.Heat = 100;
+		}
+
+		RefreshStats();
 	}
 
 
 	public void HeatSink(ItemUI item)
 	{
-		// This may be a passive effect or only used in between encounters
+		_playerStats.Heat -= item.ItemSO.AbilityValue;
+
+		if (_playerStats.Heat < 0)
+		{
+			_playerStats.Heat = 0;
+		}
+
+		if (item.ItemSO.Water > 0)
+		{
+			for (int i = 0; i < item.ItemSO.Water; i++)
+			{
+				InventoryUI.Instance.DestroySupplies(GroupType.Water);
+			}
+		}
+
+		RefreshStats();
 	}
 
 
 	public void SprayWater(ItemUI item)
 	{
 		_challenges[_selectedChallenge].DealDamage(StatType.Water, 1);
+
+		if (item.ItemSO.Water > 0)
+		{
+			for (int i = 0; i < item.ItemSO.Water; i++)
+			{
+				InventoryUI.Instance.DestroySupplies(GroupType.Water);
+			}
+		}
+
+		RefreshStats();
 	}
 
 
@@ -229,11 +322,17 @@ public class EncounterManager : MonoBehaviour {
 			InventoryUI.Instance.PlaceChallengeDamage(_currentEncounterSO.HeatDamage, Vector2.zero, false, true, true, true);
 		}
 
-		InventoryUI.Instance.SetTimeAndHeat(_playerStats.Time, _playerStats.Heat);
-
 		InventoryUI.Instance.RemoveDamagedItems();
 
+		RefreshStats();
+
 		InventoryUI.Instance.SetInventoryState(InventoryState.Rearrange);
+
+		InventoryUI.Instance.ResetUsedItems();
+
+		InventoryUI.Instance.SetMessage("Move Durable Items to undamaged areas");
+
+		_challengePanel.SetActive(false);
 	}
 
 
@@ -284,6 +383,7 @@ public class EncounterManager : MonoBehaviour {
 	{
 		_challengePanel.SetActive(true);
 
+		InventoryUI.Instance.SetMessage("Select an Ability");
 
 		if (index >= possibleEnemies.Count)
 		{
@@ -311,13 +411,16 @@ public class EncounterManager : MonoBehaviour {
 			_challenges[i-1].gameObject.SetActive(false);
 		}
 
+		_encounterTitle.text = _currentEncounterSO.Title;
+
 		// Change Inventory state (Different UI panels)
 		InventoryUI.Instance.SetInventoryState(InventoryState.Encounter);
 
+		InventoryUI.Instance.ClearPatterns();
 
 		ApplyEffects(0, false);
 
-		InventoryUI.Instance.SetTimeAndHeat(_playerStats.Time, _playerStats.Heat);
+		InventoryUI.Instance.SetStats(_playerStats);
 	}
 
 
@@ -353,6 +456,24 @@ public class EncounterManager : MonoBehaviour {
 		_endScore.text = $"Final Score: {tally.Value}";
 	}
 
+
+	public void Restart()
+	{
+		SceneManager.LoadScene(0);
+	}
+
+
+	public void RefreshStats()
+	{
+		ItemTally tally = InventoryUI.Instance.TallyItemAttributes();
+
+		_playerStats.Ammo = tally.Ammo;
+		_playerStats.Water = tally.Water;
+		_playerStats.Score = tally.Value;
+
+		InventoryUI.Instance.SetStats(_playerStats);
+	}
+
 	#endregion
 }
 
@@ -363,4 +484,5 @@ public struct PlayerStats
 	public int Water;
 	public int Ammo;
 	public int Time;
+	public int Score;
 }

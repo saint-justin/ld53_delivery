@@ -19,8 +19,8 @@ MonoBehaviour:
   GroupType: 2
   Durable: 0
   RequireTarget: 1
-  Energy: 2
-  Heat: 2
+  Energy: 3
+  Heat: 4
   Water: 0
   Ammo: 0
   Value: 0

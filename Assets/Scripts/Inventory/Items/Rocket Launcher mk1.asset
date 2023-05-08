@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Rocket Launcher mk1
   m_EditorClassIdentifier: 
   Name: Missile Launcher
-  Description: 'Deals 1-3 Damage at the cost of 3 Energy '
-  AbilityMessage: 
+  Description: 'Deals 1-3 Damage For 1 Ammo '
+  AbilityMessage: Dealt Damage
   ItemID: 201
   GroupType: 2
   Durable: 0
   RequireTarget: 1
   Energy: 0
-  Heat: 3
+  Heat: 1
   Water: 0
-  Ammo: 2
+  Ammo: 1
   Value: 0
   AbilityType: 1
   AbilityValue: 1

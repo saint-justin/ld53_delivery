@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Left Thrusters
   Description: Move 1-3 Spaces Left
-  AbilityMessage: 
+  AbilityMessage: Moved Left
   ItemID: 303
   GroupType: 3
   Durable: 0

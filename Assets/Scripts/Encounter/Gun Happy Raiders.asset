@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3f144fce593194e8c2479d1e39e45b, type: 3}
   m_Name: Gun Happy Raiders
   m_EditorClassIdentifier: 
+  Title: Gun Happy Raiders
   ChallengesData:
   - ChallengeText: Initial Effect
     ChallengeType: 1
     ChallengeValue: 0
     AvoidDamagedSlots: 1
     IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
     DamagePatterns:
     - {fileID: 9066782519276235834, guid: 86d3d35f379b4e8449d17eae7778ba72, type: 3}
     - {fileID: 9066782519276235834, guid: 66a2d80fffeadc2479d8bfacdd052e4b, type: 3}
@@ -28,6 +30,7 @@ MonoBehaviour:
     ChallengeValue: 5
     AvoidDamagedSlots: 1
     IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
     DamagePatterns:
     - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
     - {fileID: 9066782519276235834, guid: 43a96ad8c0281ea47afb0d4bb0fec948, type: 3}
@@ -38,6 +41,7 @@ MonoBehaviour:
     ChallengeValue: 3
     AvoidDamagedSlots: 1
     IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
     DamagePatterns:
     - {fileID: 8352690313389864686, guid: dc7aa4cb1452b834395814b65d6dd103, type: 3}
     EffectType: 1
@@ -47,6 +51,7 @@ MonoBehaviour:
     ChallengeValue: 1
     AvoidDamagedSlots: 0
     IsHeatDamage: 0
+    DamagePos: {x: 0, y: 0}
     DamagePatterns: []
     EffectType: 4
     EffectValue: 1

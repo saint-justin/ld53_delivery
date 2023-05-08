@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Large Jump Jets
   Description: Move 2-5 Spaces Up
-  AbilityMessage: 
+  AbilityMessage: Moved Up
   ItemID: 302
   GroupType: 3
   Durable: 0

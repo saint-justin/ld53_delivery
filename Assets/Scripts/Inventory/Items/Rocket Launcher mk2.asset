@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Rocket Launcher mk2
   m_EditorClassIdentifier: 
   Name: Missile Battery
-  Description: 'Deals 3-7 Damage at the cost of 2 Ammo '
-  AbilityMessage: 
+  Description: 'Deals 3-7 Damage For 2 Ammo '
+  AbilityMessage: Dealt Damage
   ItemID: 202
   GroupType: 2
   Durable: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: Adds 1 Water
   AbilityMessage: 
   ItemID: 802
-  GroupType: 5
+  GroupType: 6
   Durable: 0
   RequireTarget: 1
   Energy: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 02fcd3d45c898524db72c529756ecb11, type: 2}
         m_TargetAssemblyTypeName: ActionsSO, Assembly-CSharp
-        m_MethodName: SprayWater
-        m_Mode: 0
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -44,4 +44,4 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   ChargingSound: {fileID: 0}
-  AbilitySound: {fileID: 8300000, guid: a1ef42968de8fa44eb0604d99236bdc9, type: 3}
+  AbilitySound: {fileID: 0}

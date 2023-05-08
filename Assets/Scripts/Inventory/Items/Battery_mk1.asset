@@ -13,15 +13,18 @@ MonoBehaviour:
   m_Name: Battery_mk1
   m_EditorClassIdentifier: 
   Name: Battery mk1
-  Description: Generate Energy at the expense of increased Heat
+  Description: Generate 2 Energy For 1 Heat
+  AbilityMessage: Generated 2 Energy
   ItemID: 501
   GroupType: 1
-  Durable: 0
+  Durable: 1
+  RequireTarget: 0
   Energy: 0
   Heat: 1
   Water: 0
   Ammo: 0
   Value: 0
+  AbilityType: 0
   AbilityValue: 2
   Icon: {fileID: 21300000, guid: 45ad3ac1cb6d5da48a1ea6ba854b0cf4, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 5f34778d54e65a94a80a7ab09d4c27ff, type: 3}
@@ -40,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 0}
+  AbilitySound: {fileID: 8300000, guid: 62d84be8619bd874f9fa8bc5c8911e22, type: 3}

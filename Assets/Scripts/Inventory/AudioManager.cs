@@ -20,20 +20,30 @@ public class AudioManager : MonoBehaviour
 
 			DontDestroyOnLoad(gameObject);
 		}
+		else
+		{
+			Destroy(gameObject);
+		}
 	}
 
 
 	public void PlaySound(AudioClip sound)
 	{
-		_audioSourceSound.PlayOneShot(sound);
+		if (sound != null)
+		{
+			_audioSourceSound.PlayOneShot(sound);
+		}
 	}
 
 
 	public void PlayMusic(AudioClip music, bool loop)
 	{
-		_audioSourceMusic.clip = music;
-		_audioSourceMusic.Play();
-		_audioSourceMusic.loop = loop;
+		if (music != null)
+		{
+			_audioSourceMusic.clip = music;
+			_audioSourceMusic.Play();
+			_audioSourceMusic.loop = loop;
+		}
 	}
 
 
@@ -47,7 +57,10 @@ public class AudioManager : MonoBehaviour
 	{
 		for (int i = 0; i < sounds.Length; i++)
 		{
-			_audioSourceSound.PlayOneShot(sounds[i]);
+			if (sounds[i] != null)
+			{
+				_audioSourceSound.PlayOneShot(sounds[i]);
+			}
 
 			yield return new WaitForSeconds(sounds[i].length);
 		}

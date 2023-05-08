@@ -129,6 +129,15 @@ public class ItemUI : MonoBehaviour
 					{
 						foundTypeMatch = true;
 					}
+					else if (_itemSO.GroupType == GroupType.Ammo)
+					{
+						foundTypeMatch = true;
+					}
+					else if (_itemSO.GroupType == GroupType.Water)
+					{
+						foundTypeMatch = true;
+					}
+
 					//Debug.Log($"Found valid slot at block {i}: {slot.name}");
 				}
 				else

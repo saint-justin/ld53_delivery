@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Heat Sink
   m_EditorClassIdentifier: 
   Name: Heat Sink
-  Description: 'Removes 5 Heat Costs: 1 Water'
-  AbilityMessage: 
+  Description: Remove 5 Heat For 1 Water
+  AbilityMessage: Your Mech has been cooled by 5%
   ItemID: 601
   GroupType: 1
   Durable: 0
@@ -24,7 +24,8 @@ MonoBehaviour:
   Water: 1
   Ammo: 0
   Value: 0
-  AbilityValue: 0
+  AbilityType: 0
+  AbilityValue: 5
   Icon: {fileID: 21300000, guid: 02a986871ddd3bc488d5f790cf22f157, type: 3}
   Prefab: {fileID: 8203217213311966569, guid: 21e6e8198371e3643a168b8196803f69, type: 3}
   ActionEvent:
@@ -42,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 0}
+  AbilitySound: {fileID: 8300000, guid: a1ef42968de8fa44eb0604d99236bdc9, type: 3}

@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: Adds 1 Ammo
   AbilityMessage: 
   ItemID: 801
-  GroupType: 5
+  GroupType: 7
   Durable: 0
   RequireTarget: 0
   Energy: 0
@@ -24,6 +24,7 @@ MonoBehaviour:
   Water: 0
   Ammo: 1
   Value: 0
+  AbilityType: 0
   AbilityValue: 0
   Icon: {fileID: 21300000, guid: 89fdb6c8f2de4fd449d7a5c6fc38e2cd, type: 3}
   Prefab: {fileID: 729130036243146398, guid: 6b0b064b210c7db42a7c3a8112290a86, type: 3}
@@ -42,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 0}
+  AbilitySound: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hats 7
   m_EditorClassIdentifier: 
   Name: Hats G
-  Description: 
+  Description: Worth 18 Credits
   AbilityMessage: 
   ItemID: 707
   GroupType: 5
@@ -24,6 +24,7 @@ MonoBehaviour:
   Water: 0
   Ammo: 0
   Value: 18
+  AbilityType: 0
   AbilityValue: 0
   Icon: {fileID: 21300000, guid: b29c70ad4a3e98c428d916ad8730746b, type: 3}
   Prefab: {fileID: 8203217213311966569, guid: 1ba6ef67e55c5794ea4c27caf1104436, type: 3}
@@ -42,3 +43,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ChargingSound: {fileID: 0}
+  AbilitySound: {fileID: 0}

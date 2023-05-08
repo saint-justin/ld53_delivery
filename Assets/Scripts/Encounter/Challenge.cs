@@ -6,13 +6,19 @@ using UnityEngine.UI;
 public class Challenge : MonoBehaviour 
 {
     [SerializeField]
-    private Text _challengeText;
-    
+    private Image _challengeImage;
+
     [SerializeField]
-    private Text _statusText;
+    private TextMeshProUGUI _challengeTMP;
 
     [SerializeField]
     private Image _defeatIcon;
+
+    [SerializeField]
+    private Image _healthBox;
+
+    [SerializeField]
+    private TextMeshProUGUI _healthTMP;
 
     private StatType _challengeType;
     public StatType ChallengeType { get { return _challengeType; } }
@@ -21,18 +27,32 @@ public class Challenge : MonoBehaviour
     private int _maxValue;
 
 
-    public void SetChallenge(ChallengeData data)
+	private void Start()
 	{
-        _challengeText.text = data.ChallengeText;
+        _challengeImage.alphaHitTestMinimumThreshold = 0.1f;
+	}
+
+	public void SetChallenge(ChallengeData data)
+	{
+        _challengeTMP.text = data.ChallengeText;
 
         _challengeType = data.ChallengeType;
 
         _maxValue = data.ChallengeValue;
         _value = data.ChallengeValue;
 
-        _statusText.text = $"{_value} / {_maxValue}";
+        _healthTMP.text = $"{_value} / {_maxValue}";
 
         _defeatIcon.enabled = false;
+
+        if (_challengeType == StatType.Damage)
+		{
+            _healthBox.color = Color.red;
+		}
+        else if (_challengeType == StatType.Water)
+		{
+            _healthBox.color = Color.blue;
+		}
 	}
 
 
@@ -51,7 +71,7 @@ public class Challenge : MonoBehaviour
             _defeatIcon.enabled = true;
 		}
 
-        _statusText.text = $"{_value} / {_maxValue}";
+        _healthTMP.text = $"{_value} / {_maxValue}";
     }
 
 

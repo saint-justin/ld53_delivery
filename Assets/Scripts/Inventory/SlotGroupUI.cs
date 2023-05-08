@@ -80,5 +80,7 @@ public enum GroupType
 	Weapon,
 	Drive,
 	Hat,
-	Belt
+	Belt,
+	Water,
+	Ammo
 }

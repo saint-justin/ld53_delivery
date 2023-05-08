@@ -67,6 +67,15 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	private TextMeshProUGUI _timeTMP;
 
 	[SerializeField]
+	private TextMeshProUGUI _energyTMP;
+
+	[SerializeField]
+	private TextMeshProUGUI _waterTMP;
+
+	[SerializeField]
+	private TextMeshProUGUI _ammoTMP;
+
+	[SerializeField]
 	private ShopUI _shop;
 
 	[SerializeField]
@@ -81,6 +90,12 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	[SerializeField]
 	private GameObject _toolTip;
 
+	[SerializeField]
+	private GameObject _messageBox;
+
+	[SerializeField]
+	private ItemSO _waterDummyItem;
+
 
 	private void Awake()
 	{
@@ -88,7 +103,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		{
 			Instance = this;
 
-			DontDestroyOnLoad(transform.parent);
+			//DontDestroyOnLoad(transform.parent);
 
 			SetInventoryState(InventoryState.CursorOnly);
 		}
@@ -115,8 +130,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			}
 		}
 
+
 		_items = new List<ItemUI>();
 
+		ItemUI dummyitem = Instantiate(_waterDummyItem.Prefab, _itemParent, false);
+		dummyitem.Initialize(_waterDummyItem, this, _graphicRaycaster, _eventSystem);
+		dummyitem.gameObject.SetActive(false);
+		AddItemToInventory(dummyitem);
 
 		_slotGroupDict = new Dictionary<GroupType, SlotGroupUI>();
 
@@ -125,7 +145,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			_slotGroupDict.Add(_slotGroups[i].GroupType, _slotGroups[i]);
 		}
 
-		SetTimeAndHeat(0, 0);
+		EncounterManager.Instance.RefreshStats();
 	}
 
 
@@ -189,7 +209,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			{
 				AddItemToInventory(item);
 
-				TallyItemAttributes();
+				EncounterManager.Instance.RefreshStats();
 			}
 
 		}
@@ -203,7 +223,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 				RemoveItemFromInventory(block.GetParentItem);
 
-				TallyItemAttributes();
+				EncounterManager.Instance.RefreshStats();
 			}
 		}
 	}
@@ -278,10 +298,14 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 			if (!item.IsDamaged)
 			{
-				tally.Ammo += so.Ammo;
-				tally.Energy += so.Energy;
-				tally.Heat += so.Heat;
-				tally.Water += so.Water;
+				if (so.GroupType == GroupType.Ammo)
+				{
+					tally.Ammo += so.Ammo;
+				}
+				else if (so.GroupType == GroupType.Water)
+				{
+					tally.Water += so.Water;
+				}
 
 				if (item.IsTouchingGroupType(GroupType.Belt))
 				{
@@ -336,6 +360,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				UnityEngine.Cursor.visible = true;
 				_cursor.gameObject.SetActive(false);
 				_toolTip.SetActive(false);
+				_messageBox.SetActive(false);
 				break;
 			}
 			case InventoryState.CursorOnly:
@@ -344,6 +369,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				UnityEngine.Cursor.visible = false;
 				_cursor.gameObject.SetActive(true);
 				_toolTip.SetActive(false);
+				_messageBox.SetActive(false);
 				break;
 			}
 			case InventoryState.Load:
@@ -356,6 +382,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_damagePlacement.gameObject.SetActive(false);
 				_cursor.gameObject.SetActive(true);
 				_toolTip.SetActive(true);
+				_messageBox.SetActive(false);
 				LockInventory = false;
 				LockBelt = false;
 				break;
@@ -370,6 +397,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_damagePlacement.gameObject.SetActive(true);
 				_cursor.gameObject.SetActive(true);
 				_toolTip.SetActive(true);
+				_messageBox.SetActive(true);
 				LockInventory = true;
 				LockBelt = true;
 				break;
@@ -384,6 +412,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_damagePlacement.gameObject.SetActive(false);
 				_cursor.gameObject.SetActive(true);
 				_toolTip.SetActive(true);
+				_messageBox.SetActive(true);
 				LockInventory = false;
 				LockBelt = true;
 				break;
@@ -398,6 +427,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 				_damagePlacement.gameObject.SetActive(false);
 				_cursor.gameObject.SetActive(true);
 				_toolTip.SetActive(false);
+				_messageBox.SetActive(false);
 				LockInventory = true;
 				LockBelt = true;
 				break;
@@ -425,14 +455,20 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	}
 
 
-	public void StartEncounter() {
-		PopulateActions();
-		if (SceneManager.GetActiveScene().name == "InventoryTestScene") {
-			SceneManager.LoadScene("Encounter");
-		} else {
-			EncounterManager.Instance.ChangeState();
-		}
+	public void SetMessage(string message)
+	{
+		_actionBar.SetMessage(message);
 	}
+
+
+	//public void StartEncounter() {
+	//	PopulateActions();
+	//	if (SceneManager.GetActiveScene().name == "InventoryTestScene") {
+	//		SceneManager.LoadScene("Encounter");
+	//	} else {
+	//		EncounterManager.Instance.ChangeState();
+	//	}
+	//}
 
 	public void FinishLoading()
 	{
@@ -465,13 +501,38 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	public void PlaceChallengeDamage(DamagePattern[] challenge, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat, bool applyImmediate)
 	{
-		_damagePlacement.SetDamagePatterns(challenge, pos, visible, avoidDamaged, asHeat, applyImmediate);
+		StartCoroutine(DelayedPlace(challenge, pos, visible, avoidDamaged, asHeat, applyImmediate));
 	}
 
+
+	private IEnumerator DelayedPlace(DamagePattern[] challenge, Vector2 pos, bool visible, bool avoidDamaged, bool asHeat, bool applyImmediate)
+	{
+		_damagePlacement.gameObject.SetActive(false);
+
+		_damagePlacement.SetDamagePatterns(challenge, pos, visible, avoidDamaged, asHeat);
+
+		yield return new WaitForSeconds(0.04f);
+
+		_damagePlacement.gameObject.SetActive(true);
+
+		_damagePlacement.PlaceDamagePatterns(pos, avoidDamaged, asHeat);
+
+		if (applyImmediate)
+		{
+			_damagePlacement.ApplyDamage(true);
+		}
+
+	}
 
 	public void ApplyDamage()
 	{
 		_damagePlacement.ApplyDamage(true);
+	}
+
+
+	public void ClearPatterns()
+	{
+		_damagePlacement.ClearPatterns();
 	}
 
 
@@ -511,18 +572,36 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 		if (minIndex != -1)
 		{
-			Destroy(_items[minIndex].gameObject);
-
-			_items.RemoveAt(minIndex);
+			
 		}
 	}
 
 
-	public void SetTimeAndHeat(int time, int heat)
+	public void DestroySupplies(GroupType type)
 	{
-		_timeTMP.text = $"{time} Hrs Late";
+		for (int i = 0; i < _items.Count; i++)
+		{
+			if (_items[i].ItemSO.GroupType == type)
+			{
+				Destroy(_items[i].gameObject);
+				_items.RemoveAt(i);
+				return;
+			}
+		}
+	}
 
-		_heatTMP.text = $"Heat: {heat}%";
+
+	public void SetStats(PlayerStats stats)
+	{
+		_timeTMP.text = $"{stats.Time} Hrs Late";
+
+		_heatTMP.text = $"Heat: {stats.Heat}%";
+
+		_energyTMP.text = $"Energy: {stats.Energy} EU";
+
+		_waterTMP.text = $"Water: {stats.Water} L";
+
+		_ammoTMP.text = $"Ammo: {stats.Ammo}";
 	}
 
 
@@ -580,8 +659,6 @@ public enum InventoryState
 
 public struct ItemTally
 {
-	public int Energy;
-	public int Heat;
 	public int Water;
 	public int Ammo;
 	public int Value;

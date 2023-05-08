@@ -119,6 +119,8 @@ public class ActionButton : MonoBehaviour
 		}
 
 		SetUseable(false);
+
+		_parent.RefreshUseable();
 	}
 
 
@@ -142,5 +144,34 @@ public class ActionButton : MonoBehaviour
 	public void SetBorderColor(Color color)
 	{
 		_border.color = color;
+	}
+
+
+	public bool CheckUseable()
+	{
+		PlayerStats stats = EncounterManager.Instance.CurrentStats;
+
+		bool canUse = true;
+
+		if (_item.IsUsed)
+		{
+			canUse = false;
+		}
+		else if (_itemSO.Energy > stats.Energy)
+		{
+			canUse = false;
+		}
+		else if (_itemSO.Water > stats.Water)
+		{
+			canUse = false;
+		}
+		else if (_itemSO.Ammo > stats.Ammo)
+		{
+			canUse = false;
+		}
+
+		SetUseable(canUse);
+
+		return canUse;
 	}
 }

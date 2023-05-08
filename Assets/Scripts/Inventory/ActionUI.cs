@@ -23,6 +23,10 @@ public class ActionUI : MonoBehaviour
 	[SerializeField]
 	private TextMeshProUGUI _messageTMP;
 
+	private void Start()
+	{
+		_messageTMP.text = "Select an Ability";
+	}
 
 	public void PopulateActions(List<ItemUI> items)
 	{
@@ -35,9 +39,7 @@ public class ActionUI : MonoBehaviour
 
 		for (int i = 0; i < items.Count; i++)
 		{
-			
-
-			if (items[i].ItemSO.ActionEvent != null)
+			if (!items[i].IsUsed && items[i].ItemSO.ActionEvent != null)
 			{
 				string funcName = items[i].ItemSO.ActionEvent.GetPersistentMethodName(0);
 
@@ -50,6 +52,17 @@ public class ActionUI : MonoBehaviour
 				}
 			}
 		}
+
+		RefreshUseable();
+	}
+
+
+	public void RefreshUseable()
+	{
+		for (int i = 0; i < _actions.Count; i++)
+		{
+			_actions[i].CheckUseable();
+		}
 	}
 
 
@@ -59,5 +72,11 @@ public class ActionUI : MonoBehaviour
 		{
 			button.SetBorderColor(color);
 		}
+	}
+
+
+	public void SetMessage(string message)
+	{
+		_messageTMP.text = message;
 	}
 }

@@ -31,6 +31,8 @@ public class ShopUI : MonoBehaviour
 		_shopTabDict = new Dictionary<GroupType, GameObject>();
 		_shopTabDict.Add(GroupType.General, _shopTabs[0]);
 		_shopTabDict.Add(GroupType.Hat, _shopTabs[0]);
+		_shopTabDict.Add(GroupType.Ammo, _shopTabs[0]);
+		_shopTabDict.Add(GroupType.Water, _shopTabs[0]);
 		_shopTabDict.Add(GroupType.Weapon, _shopTabs[1]);
 		_shopTabDict.Add(GroupType.Drive, _shopTabs[2]);
 		_shopTabDict.Add(GroupType.Belt, _shopTabs[3]);
