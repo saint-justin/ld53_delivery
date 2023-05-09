@@ -32,8 +32,8 @@ MonoBehaviour:
     DamagePatterns: []
     EffectType: 2
     EffectValue: 15
-  - ChallengeText: Gain 1 Time
-    ChallengeType: 4
+  - ChallengeText: Douse with Water
+    ChallengeType: 3
     ChallengeValue: 1
     AvoidDamagedSlots: 0
     IsHeatDamage: 0

@@ -309,7 +309,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 				if (item.IsTouchingGroupType(GroupType.Belt))
 				{
-					tally.Value += (int)(1.5f * (float)item.ItemSO.Value);
+					tally.Value += (2 * item.ItemSO.Value);
 				}
 				else
 				{
@@ -389,6 +389,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 			}
 			case InventoryState.Encounter:
 			{
+				_damagePlacement.ClearShields();
+
 				gameObject.SetActive(true);
 				UnityEngine.Cursor.visible = false;
 				_shop.gameObject.SetActive(false);
@@ -472,18 +474,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 
 	public void FinishLoading()
 	{
-		if (EncounterManager.Instance != null)
-		{
-			EncounterManager.Instance.LoadEncounter(0);
-		}
-		else
-		{
-			SetInventoryState(InventoryState.Encounter);
-		}
+		EncounterManager.Instance.FinishLoading();
+
+		SetInventoryState(InventoryState.CursorOnly);
 
 		PopulateActions();
 
-		//AudioManager.Instance.PlayMusic(_encounterMusic, true);
+		_cursor.DeleteItem();
 	}
 
 	public void FinishTurn()
@@ -496,6 +493,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 		EncounterManager.Instance.NextEncounter();
 
 		PopulateActions();
+
+		_cursor.DeleteItem();
 	}
 
 
@@ -546,6 +545,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler
 	{
 		for (int i = _items.Count - 1; i >= 0; i--)
 		{
+			Debug.Log($"{_items[i].gameObject} {_items[i].IsDamaged}");
+
 			if (_items[i].IsDamaged && !_items[i].ItemSO.Durable)
 			{
 				Destroy(_items[i].gameObject);

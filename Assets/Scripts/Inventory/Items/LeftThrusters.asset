@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftThrusters
   m_EditorClassIdentifier: 
   Name: Left Thrusters
-  Description: Move 1-3 Spaces Left
+  Description: Move 1-3 Spaces Left For 1 Energy and 2 Heat
   AbilityMessage: Moved Left
   ItemID: 303
   GroupType: 3

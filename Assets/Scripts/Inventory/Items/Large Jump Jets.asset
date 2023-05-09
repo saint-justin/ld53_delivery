@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Large Jump Jets
   m_EditorClassIdentifier: 
   Name: Large Jump Jets
-  Description: Move 2-5 Spaces Up
+  Description: Move 2-5 Spaces Up  For 3 Energy and 6 Heat
   AbilityMessage: Moved Up
   ItemID: 302
   GroupType: 3

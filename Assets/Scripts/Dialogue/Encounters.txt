@@ -1,0 +1,15 @@
+Boss/Kid
+Kid: Hey Boss, this road's safe right? 
+Boss: Safe? Of course not! Why do you think you're in a giant mech? For the cool hat?
+Kid: ...it's a pretty cool hat. 
+Boss: Darn' tootin it is! 
+Boss: Yer' gonna face encounters on the road. You'll see where damage is about to come in.
+Boss: You can use each of yer' modules once per encounter, before the damage hits. 
+Boss: You can also prevent additional damage by overcoming the challenges laid out on the left side of yer screen.
+Boss: Almost anything in yer mech that gets hit is junked. Durable stuff can be moved elsewhere if it fits.
+Boss: And then, if yer mech's too hot, things might burn up. You have a % chance to lose something.
+Kid: Wow, is that all?
+Boss: NO.
+Kid: Life on the frontier is hard.
+Boss: Back in my day, we-
+Test: -Transmission terminated-

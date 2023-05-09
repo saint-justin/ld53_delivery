@@ -15,7 +15,7 @@ public class DialogueController : MonoBehaviour
     public TextMeshProUGUI dialogueTextComponent;
 
     [Tooltip("Script for the scene")]
-    public TextAsset sceneScript;
+    public TextAsset[] sceneScripts;
     private List<DialogueEntry> lines;
 
     [Tooltip("Speed of text (chars p/ second)")]
@@ -31,7 +31,9 @@ public class DialogueController : MonoBehaviour
     public GameObject character1;
     public GameObject character2;
 
-    void Start()
+    private int _currentScript = 0;
+
+    void Awake()
     {
         speakerBadgeRComponent.text = "";
         dialogueTextComponent.text = "";
@@ -39,9 +41,6 @@ public class DialogueController : MonoBehaviour
 
         badgeLParent = speakerBadgeLComponent.transform.parent.gameObject;
         badgeRParent = speakerBadgeRComponent.transform.parent.gameObject;
-
-        ParseScript(sceneScript);
-        StartDialogue();
     }
 
     void Update()
@@ -61,7 +60,7 @@ public class DialogueController : MonoBehaviour
 
     void ParseScript(TextAsset script)
     {
-        List<string> parsedLines = new List<string>(sceneScript.text.Split('\n'));
+        List<string> parsedLines = new List<string>(sceneScripts[_currentScript].text.Split('\n'));
 
         // Updates sprites + badges to reflect speakers
         //character1.GetComponent<SpriteRenderer>().sprite = characterSprites[0];
@@ -70,8 +69,8 @@ public class DialogueController : MonoBehaviour
         character1.GetComponent<Image>().sprite = characterSprites[0];
         character2.GetComponent<Image>().sprite = characterSprites[1];
         string speakers = parsedLines[0];
-        speakerBadgeLComponent.text = speakers.Split('/')[0];
-        speakerBadgeRComponent.text = speakers.Split('/')[1];
+        speakerBadgeLComponent.text = speakers.Split('/')[0].Trim();
+        speakerBadgeRComponent.text = speakers.Split('/')[1].Trim();
         parsedLines.RemoveAt(0); // remove line delineating who's speaking
 
         // Split off script into list of dialogue entries
@@ -83,8 +82,9 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    void StartDialogue()
+    void StartDialogue(int index)
     {
+        ParseScript(sceneScripts[index]);
         lineIndex = 0;
         StartCoroutine(TypeLine());
         UpdateActiveSpeakerBadge();
@@ -114,7 +114,7 @@ public class DialogueController : MonoBehaviour
             // Disable when all lines have been read
             gameObject.SetActive(false);
 
-            EncounterManager.Instance.EndDialogue();
+            EncounterManager.Instance.EndDialogue(_currentScript);
         }
     }
 
@@ -125,10 +125,15 @@ public class DialogueController : MonoBehaviour
             badgeLParent.SetActive(true);
             badgeRParent.SetActive(false);
         }
-        else
+        else if (speakerBadgeRComponent.text == lines[lineIndex].nameText)
         {
             badgeLParent.SetActive(false);
             badgeRParent.SetActive(true);
+        }
+		else
+		{
+            badgeLParent.SetActive(false);
+            badgeRParent.SetActive(false);
         }
     }
 
@@ -145,4 +150,23 @@ public class DialogueController : MonoBehaviour
                 return -1;
         }
     }
+
+
+    public void StartNextScript()
+	{
+        speakerBadgeRComponent.text = "";
+        dialogueTextComponent.text = "";
+        lines = new List<DialogueEntry>();
+
+        gameObject.SetActive(true);
+
+        StartDialogue(_currentScript);
+
+        _currentScript++;
+
+        if (_currentScript >= sceneScripts.Length)
+		{
+            _currentScript = 0;
+		}
+	}
 }

@@ -91,6 +91,8 @@ public class EncounterManager : MonoBehaviour {
 		_scorePanel.SetActive(false);
 
 		//EndDialogue();
+
+		_dialogueController.StartNextScript();
 	}
 
 
@@ -297,6 +299,12 @@ public class EncounterManager : MonoBehaviour {
 
 	public void EndEncounter()
 	{
+		StartCoroutine(EndEncounterDelayed());
+	}
+
+
+	private IEnumerator EndEncounterDelayed()
+	{
 		AudioManager.Instance.PlaySound(_crateSounds[UnityEngine.Random.Range(0, _crateSounds.Length)]);
 
 		if (_currentEncounterSO.ChallengesData[0].EffectType == StatType.Damage)
@@ -313,6 +321,7 @@ public class EncounterManager : MonoBehaviour {
 			}
 		}
 
+		yield return new WaitForSeconds(0.06f);
 
 		// Heat Check
 		int heatRoll = UnityEngine.Random.Range(0, 100);
@@ -367,11 +376,17 @@ public class EncounterManager : MonoBehaviour {
 
 	public void NextEncounter()
 	{
-		currentEncounter++;
-
-		if (currentEncounter < possibleEnemies.Count)
+		if (currentEncounter < numberOfEncounters)
 		{
-			LoadEncounter(currentEncounter);
+			int index = UnityEngine.Random.Range(0, possibleEnemies.Count);
+
+			EncounterSO encounter = possibleEnemies[index];
+
+			possibleEnemies.RemoveAt(index);
+
+			LoadEncounter(encounter);
+
+			currentEncounter++;
 		}
 		else
 		{
@@ -379,20 +394,17 @@ public class EncounterManager : MonoBehaviour {
 		}
 	}
 
-	public void LoadEncounter(int index)
+	public void LoadEncounter(EncounterSO encounter)
 	{
 		_challengePanel.SetActive(true);
 
+		_playerStats.Energy = 0;
+
+		InventoryUI.Instance.SetStats(_playerStats);
+
 		InventoryUI.Instance.SetMessage("Select an Ability");
 
-		if (index >= possibleEnemies.Count)
-		{
-			Debug.LogError("Error");
-			return;
-		}
-
-
-		_currentEncounterSO = possibleEnemies[index];
+		_currentEncounterSO = encounter;
 
 		if (_currentEncounterSO == null)
 		{
@@ -435,11 +447,24 @@ public class EncounterManager : MonoBehaviour {
 	}
 
 
-	public void EndDialogue()
+	public void EndDialogue(int index)
 	{
-		InventoryUI.Instance.SetInventoryState(InventoryState.Load);
+		if (index == 1)
+		{
+			InventoryUI.Instance.SetInventoryState(InventoryState.Load);
+		}
+		else
+		{
+			AudioManager.Instance.PlayMusic(_encounterMusic, true);
 
-		AudioManager.Instance.PlayMusic(_encounterMusic, true);
+			NextEncounter();
+		}
+	}
+
+
+	public void FinishLoading()
+	{
+		_dialogueController.StartNextScript();
 	}
 
 

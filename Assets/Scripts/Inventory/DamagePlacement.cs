@@ -58,6 +58,19 @@ public class DamagePlacement : MonoBehaviour
 	}
 
 
+	public void ClearShields()
+	{
+		if (_shields != null)
+		{
+			for (int i = _shields.Count - 1; i >= 0; i--)
+			{
+				Destroy(_shields[i].gameObject);
+				_shields.RemoveAt(i);
+			}
+		}
+	}
+
+
 	public void ClearPatterns()
 	{
 		_offset = Vector3.zero;
@@ -68,6 +81,8 @@ public class DamagePlacement : MonoBehaviour
 			{
 				Destroy(_patterns[i].gameObject);
 			}
+
+			_patterns = null;
 		}
 	}
 

@@ -78,7 +78,7 @@ public class BlockUI : MonoBehaviour
 		if (visible)
 		{
 			Color color = _damageIcon.color;
-			color.a = 0.5f;
+			color.a = 1f;
 			_damageIcon.color = color;
 		}
 		else

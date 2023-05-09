@@ -1,0 +1,12 @@
+Boss/Kid
+Boss: Welcome to the company, kid. I reckon you want to know how this all works. 
+Kid: Is this the part where I get rich?
+Boss: Ha, probably not.
+Boss: First you go to the Depot. You can fill up yer' mech with as much equipment and cargo as you can fit.
+Boss: There are rules, of course. Weapons go in the arms, thrusters go in the legs. 
+Kid: But I want a cannon hat!
+Boss: Absolutely no cannon hats. Do you want us all to go to jail? 
+Kid: ...no.
+Boss: Good. Anything in yer' hat's in the shade, immune to heat damage. And cargo in your belt is worth DOUBLE.
+Kid: Yipee!
+Boss: That's yer' one yipee for the fiscal year, hope you enjoyed it. Now load up that mech!
